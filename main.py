@@ -32,11 +32,14 @@
 #     json.dump(all_categories_dict, file, indent=4, ensure_ascii=False)
 
 # main.py
-from scraper import parse_auto_ru, save_to_file
+from data_parser import parse_auto_ru
+from file_handler import save_to_file
+
 
 def main():
     offers_data = parse_auto_ru()
     save_to_file(offers_data, "data.json")
+
 
 if __name__ == "__main__":
     main()

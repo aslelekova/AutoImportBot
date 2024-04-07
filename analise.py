@@ -1,14 +1,15 @@
-import json
+# analise.py
+from file_handler import load_data_from_json
 
-with open("data.json", "r", encoding="utf8") as f:
-    data = json.load(f)
+data = load_data_from_json("data.json")
+for item in data:
+    ad_id = item.get("id", "")
+    print("Ссылка на объявление:", ad_id)
 
-price = []
-x = 1
-for offer in data:
-    if offer['price_info']:
 
-        price.append(offer['price_info']['price'])
-print(price)
-# average = sum(price) / len(price)
-# print("Average: ", int(average))
+#
+# price = []
+# for offer in data:
+#     if offer.get('price_info'):
+#         price.append(offer['price_info']['price'])
+# print(price)

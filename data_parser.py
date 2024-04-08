@@ -12,10 +12,14 @@ def parse_auto_ru():
         params = {
             "year_from": 2022,
             "year_to": 2023,
+            "price_from": None,
+            "price_to": 2200000,
             "section": "all",
+            "km_age_from": 1000,
+            "km_age_to": 100000,
             "category": "cars",
             "page": page,
-            "catalog_filter": [{"mark": "GEELY", "model": "ATLAS"}],
+            "catalog_filter": [{"mark": "OMODA", "model": "S5"}],
             "geo_id": []
         }
 

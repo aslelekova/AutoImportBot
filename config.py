@@ -3,6 +3,7 @@
 # URL for making requests.
 url = "https://auto.ru/-/ajax/desktop-search/listing/"
 
+
 # Headers required for the request.
 headers = {
     "Accept": "*/*",

@@ -32,14 +32,28 @@
 #     json.dump(all_categories_dict, file, indent=4, ensure_ascii=False)
 
 # main.py
+#
+# from data_parser import parse_auto_ru
+# from file_handler import save_to_file
+# from car_analysis import analyze_car_data
+#
+# def main():
+#     offers_data = parse_auto_ru()
+#     save_to_file(offers_data, "data.json")
+#     # analyze_car_data(offers_data)
+#
+# if __name__ == "__main__":
+#     main()
+
+
 from data_parser import parse_auto_ru
 from file_handler import save_to_file
-
+from car_analysis import analyze_car_data
 
 def main():
     offers_data = parse_auto_ru()
     save_to_file(offers_data, "data.json")
-
+    analyze_car_data(offers_data)
 
 if __name__ == "__main__":
     main()

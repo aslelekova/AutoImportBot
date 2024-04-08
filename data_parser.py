@@ -40,3 +40,7 @@ def parse_auto_ru():
             break
 
     return offers
+
+
+def parse_encar_com():
+    pass

@@ -10,16 +10,16 @@ def parse_auto_ru():
     while True:
         # ToDo: get params from bot.
         params = {
-            "year_from": 2022,
-            "year_to": 2023,
+            "year_from": 2019,
+            "year_to": 2022,
             "price_from": None,
-            "price_to": 2200000,
+            "price_to": 2000000,
             "section": "all",
-            "km_age_from": 1000,
+            "km_age_from": None,
             "km_age_to": 100000,
             "category": "cars",
             "page": page,
-            "catalog_filter": [{"mark": "OMODA", "model": "S5"}],
+            "catalog_filter": [{"mark": "NISSAN", "model": "JUKE"}],
             "geo_id": []
         }
 

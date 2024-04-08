@@ -8,8 +8,8 @@ def save_to_file(data, filename):
         json.dump(data, file, indent=4, ensure_ascii=False)
 
 
-def load_data_from_json(file_path):
+def load_data_from_json(filename):
     # Function to load data from a file.
-    with open(file_path, "r", encoding="utf8") as f:
-        data = json.load(f)
+    with open(filename) as file:
+        data = json.load(file)
     return data

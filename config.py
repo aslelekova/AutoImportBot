@@ -1,10 +1,10 @@
 # config.py
 
 # URL for making requests.
-url = "https://auto.ru/-/ajax/desktop-search/listing/"
+url_auto_ru = "https://auto.ru/-/ajax/desktop-search/listing/"
 
 # Headers required for the request.
-headers = {
+headers_auto_ru = {
     "Accept": "*/*",
     "Accept-Encoding": "gzip, deflate, br",
     "Accept-Language": "ru",
@@ -92,3 +92,17 @@ headers = {
 }
 
 TOKEN = '6424744126:AAGq7bBHVyCAO0cZfNmN3wv9dOCnKdi60OY'
+
+headers_encar_com = {
+    'Accept': 'application/json, text/javascript, */*; q=0.01',
+    'Accept-Encoding': 'gzip, deflate',
+    'Accept-Language': 'ru',
+    'Connection': 'keep-alive',
+    'Host': 'api.encar.com',
+    'Origin': 'http://www.encar.com',
+    'Referer': 'http://www.encar.com/',
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) '
+                  'Version/17.4.1 Safari/605.1.15'
+}
+
+url_encar_com = "http://api.encar.com/search/car/list/premium"

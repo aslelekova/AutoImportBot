@@ -1,32 +1,32 @@
 # data_parser.py
-import file_handler
+import json
+import math
 from config import url_auto_ru, headers_auto_ru, url_encar_com, headers_encar_com
 import requests
 
 
-def parse_auto_ru():
-
+def parse_auto_ru(brand_auto_ru):
     offers = []
     page = 1
     # Loop until there are no more offers.
     while True:
         # ToDo: get params from bot.
         params = {
-            "displacement_from": 200,
-            "displacement_to": 5500,
-            "transmission": "AUTOMATIC",
-            "gear_type": "ALL_WHEEL_DRIVE",
-            "engine_group": "GASOLINE",
+            "displacement_from": None,
+            "displacement_to": None,
+            "transmission": None,
+            "gear_type": None,
+            "engine_group": "DIESEL",
             "year_from": 2019,
             "year_to": 2024,
             "price_from": None,
-            "price_to": 8000000,
+            "price_to": 5000000,
             "section": "all",
             "km_age_from": None,
             "km_age_to": 100000,
             "category": "cars",
             "page": page,
-            "catalog_filter": [{"mark": "BMW", "model": "M5"}],
+            f"catalog_filter": [{"mark": brand_auto_ru, "model": "Q3"}],
             "geo_id": []
         }
 
@@ -53,12 +53,40 @@ def parse_auto_ru():
     return offers
 
 
-def parse_encar_com():
+def parse_encar_com(brand_encar_com):
     params = {
-                 "count": "true",
-                 "q": "(And.Year.range(201500..202199)._.Mileage.range(20000..120000)._.Hidden.N._.(C.CarType.N._.(C.Manufacturer.랜드로버._.ModelGroup.디스커버리.))_.FuelType.디젤.)",
-                 "sr": "|ModifiedDate|0|8"
+        "count": "true",
+        "q": f"(And.Year.range(201900..202499)._.Mileage.range(..100000)._.Price.range(..7000)._.Hidden.N._.(C.CarType.N._.(C.Manufacturer.{brand_encar_com}._.ModelGroup.Q3.))_.SellType.일반._.FuelType.디젤.)",
+        "sr": "|ModifiedDate|0|20"
     }
-    response = requests.post(url_encar_com, json=params, headers=headers_encar_com)
-    data = response.json()
-    file_handler.save_to_file(data, "encar.json")
+
+    response = requests.get(url_encar_com, params=params, headers=headers_encar_com)
+    if response.status_code == 200:
+        try:
+            json_data = response.json()
+            count = json_data.get("Count", 0)
+            total_pages = math.ceil(count / 20)
+
+            all_data = []
+
+            for page in range(total_pages):
+                params["sr"] = f"|ModifiedDate|{page * 20}|20"
+                response = requests.get(url_encar_com, params=params, headers=headers_encar_com)
+                if response.status_code == 200:
+                    try:
+                        json_data = response.json()
+                        all_data.append(json_data)
+                    except json.decoder.JSONDecodeError:
+                        print("Ошибка: Невозможно преобразовать ответ в JSON")
+                        break
+                else:
+                    print(f"Ошибка: Не удалось выполнить запрос. Код ответа: {response.status_code}")
+                    break
+
+        except json.decoder.JSONDecodeError:
+            print("Ошибка: Невозможно преобразовать ответ в JSON")
+    else:
+        print(f"Ошибка: Не удалось выполнить запрос. Код ответа: {response.status_code}")
+    return all_data
+
+

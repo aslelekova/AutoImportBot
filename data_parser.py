@@ -5,7 +5,7 @@ from config import url_auto_ru, headers_auto_ru, url_encar_com, headers_encar_co
 import requests
 
 
-def parse_auto_ru(brand_auto_ru):
+def parse_auto_ru(brand_auto_ru, model_auto_ru):
     offers = []
     page = 1
     # Loop until there are no more offers.
@@ -16,8 +16,8 @@ def parse_auto_ru(brand_auto_ru):
             "displacement_to": None,
             "transmission": None,
             "gear_type": None,
-            "engine_group": "DIESEL",
-            "year_from": 2019,
+            "engine_group": None,
+            "year_from": 2013,
             "year_to": 2024,
             "price_from": None,
             "price_to": 5000000,
@@ -26,8 +26,9 @@ def parse_auto_ru(brand_auto_ru):
             "km_age_to": 100000,
             "category": "cars",
             "page": page,
-            f"catalog_filter": [{"mark": brand_auto_ru, "model": "Q3"}],
-            "geo_id": []
+            f"catalog_filter": [{"mark": brand_auto_ru, "model": model_auto_ru}],
+            "geo_radius": 200,
+            "geo_id": [213]
         }
 
         try:
@@ -53,12 +54,15 @@ def parse_auto_ru(brand_auto_ru):
     return offers
 
 
-def parse_encar_com(brand_encar_com):
+def parse_encar_com(brand_encar_com, model_encar_com):
     params = {
         "count": "true",
-        "q": f"(And.Year.range(201900..202499)._.Mileage.range(..100000)._.Price.range(..7000)._.Hidden.N._.(C.CarType.N._.(C.Manufacturer.{brand_encar_com}._.ModelGroup.Q3.))_.SellType.일반._.FuelType.디젤.)",
+        "q": f"(And.Year.range(201300..202499)._.Mileage.range(..100000)._.Price.range(..7000)._.Hidden.N._.("
+             f"C.CarType.N._.(C.Manufacturer.{brand_encar_com}._.ModelGroup.{model_encar_com}.))_.SellType.일반._.FuelType.디젤.)",
         "sr": "|ModifiedDate|0|20"
     }
+
+    all_data = []
 
     response = requests.get(url_encar_com, params=params, headers=headers_encar_com)
     if response.status_code == 200:
@@ -66,8 +70,6 @@ def parse_encar_com(brand_encar_com):
             json_data = response.json()
             count = json_data.get("Count", 0)
             total_pages = math.ceil(count / 20)
-
-            all_data = []
 
             for page in range(total_pages):
                 params["sr"] = f"|ModifiedDate|{page * 20}|20"
@@ -88,5 +90,3 @@ def parse_encar_com(brand_encar_com):
     else:
         print(f"Ошибка: Не удалось выполнить запрос. Код ответа: {response.status_code}")
     return all_data
-
-

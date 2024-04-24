@@ -25,3 +25,4 @@ if __name__ == "__main__":
 # ToDo: add token in env
 # ToDo: write xml for every function
 # ToDo: write all exceptions
+# ToDO: add logging

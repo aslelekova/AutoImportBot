@@ -12,7 +12,9 @@ from keyboards import marks_keyboard as KB_brand
 from keyboards import models_keyboard as KB_model
 from keyboards import year_bounds_keyboard as KB_year
 from keyboards import fuel_type_keyboard as KB_fuel
+from keyboards import mileage_keyboard as KB_mileage
 from keyboards.fuel_type_keyboard import fuel_type_choose
+from keyboards.mileage_keyboard import mileage_choose
 from keyboards.models_keyboard import model_choose
 from keyboards.year_bounds_keyboard import age_choose
 
@@ -57,7 +59,18 @@ async def get_fuel_type(call: types.CallbackQuery, callback_data: KB_fuel.FuelCh
     await state.update_data(fuel_type_auto_ru=callback_data.fuel_type_auto_ru)
     await state.update_data(fuel_type_encar_com=callback_data.fuel_type_encar_com)
     await call.message.edit_text(f'🚗 Тип двигателя?\n\n✅ Ответ: {callback_data.answer}')
-    # await call.message.answer('💰 Стоимость автомобиля?')
+    await call.message.answer(
+        '🚗 Пробег автомобиля?',
+        reply_markup=mileage_choose()
+    )
+
+
+@router.callback_query(KB_mileage.MileageChoose.filter(F.action == 'mileage_bounds'))
+async def get_mileage(call: types.CallbackQuery, callback_data: KB_mileage.MileageChoose, state: FSMContext):
+    await state.update_data(mileage_left_bound=callback_data.mileage_left_bound)
+    await state.update_data(mileage_right_bound=callback_data.mileage_right_bound)
+    await call.message.edit_text(f'🚗 Пробег автомобиля?\n\n✅ Ответ: {callback_data.answer}')
+
 
 @router.message(Command("cars"))
 async def handle_help(message: types.Message, state: FSMContext):
@@ -71,21 +84,24 @@ async def handle_help(message: types.Message, state: FSMContext):
     year_right_bound = fsm_data.get('year_right_bound')
     fuel_type_auto_ru = fsm_data.get('fuel_type_auto_ru')
     fuel_type_encar_com = fsm_data.get('fuel_type_encar_com')
+    mileage_left_bound  = fsm_data.get('mileage_left_bound')
+    mileage_right_bound  = fsm_data.get('mileage_right_bound')
+
     print(fsm_data)
-    offers_data_auto_ru = parse_auto_ru(brand_auto_ru, model_auto_ru, year_left_bound, year_right_bound, fuel_type_auto_ru)
-    offers_data_encar_com = parse_encar_com(brand_encar_com, model_encar_com, year_left_bound, year_right_bound, fuel_type_encar_com)
-
-    # Saving the parsed data to a file.
-    save_to_file(offers_data_auto_ru, "data_auto_ru.json")
-    save_to_file(offers_data_encar_com, "data_encar_com.json")
-
-    data_auto_ru = load_data_from_json("data_auto_ru.json")
-    brand, model, formatted_average_price, links_auto_ru = analyze_car_data_auto_ru(
-        data_auto_ru)
-
-    data_encar_com = load_data_from_json("data_encar_com.json")
-
-    cards = analyze_car_data_encar_com(data_encar_com, brand, model, formatted_average_price, links_auto_ru)
-
-    for i, card in enumerate(cards, start=1):
-        await message.answer(card)
+    # offers_data_auto_ru = parse_auto_ru(brand_auto_ru, model_auto_ru, year_left_bound, year_right_bound, fuel_type_auto_ru)
+    # offers_data_encar_com = parse_encar_com(brand_encar_com, model_encar_com, year_left_bound, year_right_bound, fuel_type_encar_com)
+    #
+    # # Saving the parsed data to a file.
+    # save_to_file(offers_data_auto_ru, "data_auto_ru.json")
+    # save_to_file(offers_data_encar_com, "data_encar_com.json")
+    #
+    # data_auto_ru = load_data_from_json("data_auto_ru.json")
+    # brand, model, formatted_average_price, links_auto_ru = analyze_car_data_auto_ru(
+    #     data_auto_ru)
+    #
+    # data_encar_com = load_data_from_json("data_encar_com.json")
+    #
+    # cards = analyze_car_data_encar_com(data_encar_com, brand, model, formatted_average_price, links_auto_ru)
+    #
+    # for i, card in enumerate(cards, start=1):
+    #     await message.answer(card)

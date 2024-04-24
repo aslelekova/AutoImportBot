@@ -5,7 +5,7 @@ from config import url_auto_ru, headers_auto_ru, url_encar_com, headers_encar_co
 import requests
 
 
-def parse_auto_ru(brand_auto_ru, model_auto_ru):
+def parse_auto_ru(brand_auto_ru, model_auto_ru, year_left_bound, year_right_bound, fuel_type_auto_ru):
     offers = []
     page = 1
     # Loop until there are no more offers.
@@ -16,11 +16,11 @@ def parse_auto_ru(brand_auto_ru, model_auto_ru):
             "displacement_to": None,
             "transmission": None,
             "gear_type": None,
-            "engine_group": None,
-            "year_from": 2013,
-            "year_to": 2024,
+            "engine_group": fuel_type_auto_ru,
+            "year_from": int(year_left_bound),
+            "year_to": int(year_right_bound),
             "price_from": None,
-            "price_to": 5000000,
+            "price_to": 6000000,
             "section": "all",
             "km_age_from": None,
             "km_age_to": 100000,
@@ -30,7 +30,6 @@ def parse_auto_ru(brand_auto_ru, model_auto_ru):
             "geo_radius": 200,
             "geo_id": [213]
         }
-
         try:
             # Make a POST request with parameters and headers.
             response = requests.post(url_auto_ru, json=params, headers=headers_auto_ru)
@@ -54,13 +53,22 @@ def parse_auto_ru(brand_auto_ru, model_auto_ru):
     return offers
 
 
-def parse_encar_com(brand_encar_com, model_encar_com):
-    params = {
-        "count": "true",
-        "q": f"(And.Year.range(201300..202499)._.Mileage.range(..100000)._.Price.range(..7000)._.Hidden.N._.("
-             f"C.CarType.N._.(C.Manufacturer.{brand_encar_com}._.ModelGroup.{model_encar_com}.))_.SellType.일반._.FuelType.디젤.)",
-        "sr": "|ModifiedDate|0|20"
-    }
+def parse_encar_com(brand_encar_com, model_encar_com, year_left_bound, year_right_bound, fuel_type_encar_com):
+    if fuel_type_encar_com == '가솔린+전기 디젤+전기':
+        params = {
+            "count": "true",
+            "q": "(And.Hidden.N._.(Or.FuelType.가솔린+전기._.FuelType.디젤+전기.)_.SellType.일반._.(C.CarType.N._.("
+                 f"C.Manufacturer.{brand_encar_com}._.ModelGroup.{model_encar_com}.))_.Year.range({year_left_bound}00.."
+                 f"{year_right_bound}99)._.Mileage.range(..100000)._.Price.range(..7000).)",
+            "sr": "|ModifiedDate|0|20"
+        }
+    else:
+        params = {
+            "count": "true",
+            "q": f"(And.Year.range({year_left_bound}00..{year_right_bound}99)._.Mileage.range(..100000)._.Price.range(..7000)._.Hidden.N._.("
+                 f"C.CarType.N._.(C.Manufacturer.{brand_encar_com}._.ModelGroup.{model_encar_com}.))_.SellType.일반._.FuelType.{fuel_type_encar_com}.)",
+            "sr": "|ModifiedDate|0|20"
+        }
 
     all_data = []
 

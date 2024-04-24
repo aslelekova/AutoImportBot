@@ -5,7 +5,6 @@ from aiogram.client.default import DefaultBotProperties
 
 from config import TOKEN
 from handlers import start_handler, car_params_handler
-from handlers.start_handler import router
 
 # bot = Bot(token=os.getenv("TOKEN"))
 bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode="HTML"))
@@ -25,3 +24,4 @@ if __name__ == "__main__":
 
 # ToDo: add token in env
 # ToDo: write xml for every function
+# ToDo: write all exceptions

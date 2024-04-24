@@ -33,3 +33,6 @@ urllib3==2.2.1
 useragent==0.1.1
 wsproto==1.2.0
 yarl==1.9.4
+
+pycbrf~=1.1.0
+googletrans~=4.0.0rc1

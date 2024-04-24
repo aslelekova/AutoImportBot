@@ -25,8 +25,8 @@ def brand_choose():
     )
     kb.row(
         types.InlineKeyboardButton(text="Chevrolet",
-                                   callback_data=BrandChoose(action='brand_auto_ru', answer='Chevrolet',
-                                                             brand_auto_ru='CHEVROLET', brand_encar_com='쉐보레').pack()),
+                                   callback_data=BrandChoose(action='brand_car', answer='Chevrolet',
+                                                             brand_auto_ru='CHEVROLET', brand_encar_com='쉐보레(GM대우_)').pack()),
         types.InlineKeyboardButton(text="Ferrari",
                                    callback_data=BrandChoose(action='brand_car', answer='Ferrari',
                                                              brand_auto_ru='FERRARI', brand_encar_com='페라리').pack()),
@@ -35,7 +35,7 @@ def brand_choose():
                                                              brand_auto_ru='FORD', brand_encar_com='포드').pack())
     )
     kb.row(
-        types.InlineKeyboardButton(text="Geneis",
+        types.InlineKeyboardButton(text="Genesis",
                                    callback_data=BrandChoose(action='brand_car', answer='Genesis',
                                                              brand_auto_ru='GENESIS', brand_encar_com='제네시스').pack()),
         types.InlineKeyboardButton(text="Honda",
@@ -50,7 +50,7 @@ def brand_choose():
                                    callback_data=BrandChoose(action='brand_car', answer='Jaguar',
                                                              brand_auto_ru='JAGUAR', brand_encar_com='재규어').pack()),
         types.InlineKeyboardButton(text="Kia",
-                                   callback_data=BrandChoose(action='brand_auto_ru', answer='Kia',
+                                   callback_data=BrandChoose(action='brand_car', answer='Kia',
                                                              brand_auto_ru='KIA', brand_encar_com='기아').pack()),
         types.InlineKeyboardButton(text="Lamborghini",
                                    callback_data=BrandChoose(action='brand_car', answer='Lamborghini',
@@ -62,19 +62,19 @@ def brand_choose():
                                                              brand_auto_ru='LAND_ROVER',
                                                              brand_encar_com='랜드로버').pack()),
         types.InlineKeyboardButton(text="Lexus",
-                                   callback_data=BrandChoose(action='brand_auto_ru', answer='Lexus',
+                                   callback_data=BrandChoose(action='brand_car', answer='Lexus',
                                                              brand_auto_ru='LEXUS', brand_encar_com='렉서스').pack()),
         types.InlineKeyboardButton(text="Maserati",
-                                   callback_data=BrandChoose(action='brand_auto_ru', answer='Maserati',
+                                   callback_data=BrandChoose(action='brand_car', answer='Maserati',
                                                              brand_auto_ru='MASERATI', brand_encar_com='마세라티').pack())
 
     )
     kb.row(
         types.InlineKeyboardButton(text="Mercedes-Benz",
-                                   callback_data=BrandChoose(action='brand_auto_ru', answer='Mercedes-Benz',
+                                   callback_data=BrandChoose(action='brand_car', answer='Mercedes-Benz',
                                                              brand_auto_ru='MERCEDES', brand_encar_com='벤츠').pack()),
     types.InlineKeyboardButton(text="Mini",
-                               callback_data=BrandChoose(action='brand_auto_ru', answer='Mini',
+                               callback_data=BrandChoose(action='brand_car', answer='Mini',
                                                          brand_auto_ru='MINI', brand_encar_com='미니').pack()),
         types.InlineKeyboardButton(text="Nissan",
                                    callback_data=BrandChoose(action='brand_car', answer='Nissan',
@@ -82,14 +82,14 @@ def brand_choose():
     )
     kb.row(
         types.InlineKeyboardButton(text="Porsche",
-                                   callback_data=BrandChoose(action='brand_auto_ru', answer='Porsche',
+                                   callback_data=BrandChoose(action='brand_car', answer='Porsche',
                                                              brand_auto_ru='PORSCHE', brand_encar_com='포르쉐').pack()),
         types.InlineKeyboardButton(text="Rolls-Royce",
                                    callback_data=BrandChoose(action='brand_car', answer='Rolls-Royce',
                                                              brand_auto_ru='ROLLS_ROYCE', brand_encar_com='롤스로이스').pack()),
 
         types.InlineKeyboardButton(text="Tesla",
-                                   callback_data=BrandChoose(action='brand_auto_ru', answer='Tesla',
+                                   callback_data=BrandChoose(action='brand_car', answer='Tesla',
                                                              brand_auto_ru='TESLA', brand_encar_com='테슬라').pack())
     )
     kb.row(

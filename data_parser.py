@@ -5,32 +5,30 @@ from config import url_auto_ru, headers_auto_ru, url_encar_com, headers_encar_co
 import requests
 
 
-def parse_auto_ru(brand_auto_ru, model_auto_ru, year_left_bound, year_right_bound, fuel_type_auto_ru):
+def parse_auto_ru(brand_auto_ru, model_auto_ru, year_left_bound, year_right_bound, fuel_type_auto_ru,
+                  mileage_left_bound, mileage_right_bound):
     offers = []
     page = 1
     # Loop until there are no more offers.
     while True:
-        # ToDo: get params from bot.
-        # params = {
-        #     "displacement_from": None,
-        #     "displacement_to": None,
-        #     "transmission": None,
-        #     "gear_type": None,
-        #     "engine_group": fuel_type_auto_ru,
-        #     "year_from": int(year_left_bound),
-        #     "year_to": int(year_right_bound),
-        #     "price_from": None,
-        #     "price_to": 6000000,
-        #     "section": "all",
-        #     "km_age_from": None,
-        #     "km_age_to": 100000,
-        #     "category": "cars",
-        #     "page": page,
-        #     f"catalog_filter": [{"mark": brand_auto_ru, "model": model_auto_ru}],
-        #     "geo_radius": 200,
-        #     "geo_id": [213]
-        # }
-        {"section": "all", "category": "cars", "geo_radius": 200, "geo_id": [213]}
+        if year_left_bound == 0 and year_right_bound == 0: year_left_bound, year_right_bound = None, None
+        if mileage_left_bound == 0 and mileage_right_bound == 0: mileage_left_bound, mileage_right_bound = None, None
+        if fuel_type_auto_ru == '': fuel_type_auto_ru = None
+        params = {
+            "transmission": None,
+            "engine_group": fuel_type_auto_ru,
+            "year_from": int(year_left_bound),
+            "year_to": int(year_right_bound),
+            "section": "all",
+            "km_age_from": mileage_left_bound,
+            "km_age_to": mileage_right_bound,
+            "category": "cars",
+            "page": page,
+            f"catalog_filter": [{"mark": brand_auto_ru, "model": model_auto_ru}],
+            "geo_radius": 200,
+            "geo_id": [213]
+        }
+
         try:
             # Make a POST request with parameters and headers.
             response = requests.post(url_auto_ru, json=params, headers=headers_auto_ru)
@@ -54,8 +52,43 @@ def parse_auto_ru(brand_auto_ru, model_auto_ru, year_left_bound, year_right_boun
     return offers
 
 
-def parse_encar_com():
-    params = {"count": "true", "q": "(And.Hidden.N._.CarType.Y.)", "sr": "|ModifiedDate|20|20"}
+def parse_encar_com(brand_encar_com, model_encar_com, year_left_bound, year_right_bound, fuel_type_encar_com,
+                    mileage_left_bound, mileage_right_bound):
+    if mileage_right_bound == 0: mileage_right_bound = ''
+    if mileage_left_bound == 0: mileage_left_bound = ''
+    if year_left_bound == 0 and year_right_bound == 0: year_left_bound, year_right_bound = '', ''
+    if brand_encar_com in ["쉐보레(GM대우_)", "제네시스", "기아", "현대"]:
+        if fuel_type_encar_com == "가솔린+전기 디젤+전기":
+            params = {
+                "count": "true",
+                "q": f"(And.Year.range({str(year_left_bound)}00..{str(year_right_bound)}99)._.Mileage.range({str(mileage_left_bound)}..{str(mileage_right_bound)})._.Hidden.N._.SellType.일반._.("
+                     f"Or.FuelType.가솔린+전기._.FuelType.디젤+전기.)_.(C.CarType.Y._.(C.Manufacturer.{brand_encar_com}._.ModelGroup.{model_encar_com}.)))",
+                "sr": "|ModifiedDate|0|20"
+            }
+        else:
+            params = {
+                "count": "true",
+                "q": f"(And.Year.range({str(year_left_bound)}00..{str(year_right_bound)}99)._.Mileage.range({str(mileage_left_bound)}.."
+                     f"{str(mileage_right_bound)})._.Hidden.N._.(C.CarType.Y._.(C.Manufacturer.{brand_encar_com}._.ModelGroup."
+                     f"{model_encar_com}.))_.SellType.일반._.FuelType.{fuel_type_encar_com}.)",
+                "sr": "|ModifiedDate|0|20"
+            }
+    else:
+        if fuel_type_encar_com == "가솔린+전기 디젤+전기":
+            params = {
+                "count": "true",
+                "q": f"(And.Year.range({str(year_left_bound)}00..{str(year_right_bound)}99)._.Mileage.range({str(mileage_left_bound)}..{str(mileage_right_bound)})._.Hidden.N._.SellType.일반._.("
+                     f"Or.FuelType.가솔린+전기._.FuelType.디젤+전기.)_.(C.CarType.N._.(C.Manufacturer.{brand_encar_com}._.ModelGroup.{model_encar_com}.)))",
+                "sr": "|ModifiedDate|0|20"
+            }
+        else:
+            params = {
+                "count": "true",
+                "q": f"(And.Year.range({str(year_left_bound)}00..{str(year_right_bound)}99)._.Mileage.range({str(mileage_left_bound)}.."
+                     f"{str(mileage_right_bound)})._.Hidden.N._.(C.CarType.N._.(C.Manufacturer.{brand_encar_com}._.ModelGroup."
+                     f"{model_encar_com}.))_.SellType.일반._.FuelType.{fuel_type_encar_com}.)",
+                "sr": "|ModifiedDate|0|20"
+            }
 
     all_data = []
 

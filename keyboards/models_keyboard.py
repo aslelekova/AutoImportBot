@@ -1,3 +1,4 @@
+# models_keyboard.py
 from aiogram import types
 
 from aiogram.filters.callback_data import CallbackData
@@ -12,6 +13,12 @@ class ModelChoose(CallbackData, prefix='m'):
 
 
 def model_choose(brand_auto_ru):
+    """
+    Generates an inline keyboard for choosing car models based on the brand.
+
+    :param brand_auto_ru: Brand code for the car model.
+    :return: InlineKeyboardMarkup: Inline keyboard with car model options.
+    """
     kb = InlineKeyboardBuilder()
     if brand_auto_ru == "AUDI":
         kb.row(
@@ -34,7 +41,6 @@ def model_choose(brand_auto_ru):
                                                                  model_encar_com='A6').pack())
         )
         kb.row(
-
             types.InlineKeyboardButton(text="A7",
                                        callback_data=ModelChoose(action='model_car', answer='A7', model_auto_ru='A7',
                                                                  model_encar_com='A7').pack()),
@@ -131,15 +137,15 @@ def model_choose(brand_auto_ru):
         kb.row(
             types.InlineKeyboardButton(text="RS e-tron GT",
                                        callback_data=ModelChoose(action='model_car', answer='RS e-tron GT',
-                                                                 model_auto_ru='RS e-tron GT',
+                                                                 model_auto_ru='RS_E_TRON_GT',
                                                                  model_encar_com='RS e-트론 G').pack()),
             types.InlineKeyboardButton(text="e-tron",
                                        callback_data=ModelChoose(action='model_car', answer='e-tron',
-                                                                 model_auto_ru='e-tron',
+                                                                 model_auto_ru='E_TRON',
                                                                  model_encar_com='e-트론').pack()),
             types.InlineKeyboardButton(text="e-tron GT",
                                        callback_data=ModelChoose(action='model_car', answer='e-tron GT',
-                                                                 model_auto_ru='e-tron GT',
+                                                                 model_auto_ru='E_TRON_GT',
                                                                  model_encar_com='e-트론 GT').pack())
         )
     elif brand_auto_ru == "BENTLEY":

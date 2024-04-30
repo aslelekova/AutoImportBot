@@ -1,3 +1,4 @@
+# marks_keyboard.py
 from aiogram import types
 from aiogram.filters.callback_data import CallbackData
 from aiogram.utils.keyboard import InlineKeyboardBuilder
@@ -11,6 +12,11 @@ class BrandChoose(CallbackData, prefix='b'):
 
 
 def brand_choose():
+    """
+       Generates an inline keyboard with options for selecting car brands.
+
+       :return: InlineKeyboardMarkup: Inline keyboard with car brand options.
+    """
     kb = InlineKeyboardBuilder()
     kb.row(
         types.InlineKeyboardButton(text="Audi",

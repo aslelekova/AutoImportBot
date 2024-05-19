@@ -66,7 +66,7 @@ def process_item_encar_com(item, brand, model, encoded_data_auto_ru):
 
     # Check if the price is valid.
     price_won = item.get("Price", "")
-    if price_won == 0 or price_won == 9999.0:
+    if price_won == 0 or price_won == 9999.0 or price_won == 99999.0:
         return None
 
     # Extract relevant car information.

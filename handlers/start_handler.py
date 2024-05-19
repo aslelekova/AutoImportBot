@@ -22,4 +22,17 @@ async def cmd_start(message: types.Message):
 
 @router.message(Command("help"))
 async def handle_help(message: types.Message):
-    await message.answer(text="I can help you to find a car.")
+    """
+    Handle the /help command to provide information about available commands and how to use the bot.
+
+    :param message: The message object.
+    :return: None
+    """
+    await message.answer(text="Привет! Я бот, который поможет вам найти подходящий автомобиль.\n\n"
+                              "Чтобы начать, вы можете использовать следующие команды:\n"
+                              "/start - начать диалог с ботом\n"
+                              "/help - получить справку о доступных командах\n\n"
+                              "Если у вас возникли вопросы или вы нашли для себя подходящий автомобиль, "
+                              "пишите удобным способом!\n\n📲+7 (495) 844-88-08\n✉️Телеграм: @PRIDECARSAUTO\n📁WhatsApp: "
+                              "wa.me/79802120669\n🔗Сайт: https://pride-cars.com/"
+)

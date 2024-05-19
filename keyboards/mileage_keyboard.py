@@ -1,6 +1,5 @@
 # mileage_keyboard.py
 from aiogram import types
-
 from aiogram.filters.callback_data import CallbackData
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
@@ -60,7 +59,7 @@ def mileage_choose():
                                    callback_data=MileageChoose(action='mileage_bounds',
                                                                answer='до 80 000 км',
                                                                mileage_left_bound=0,
-                                                               mileage_right_bound=800000).pack()),
+                                                               mileage_right_bound=80000).pack()),
         types.InlineKeyboardButton(text="до 100 000 км",
                                    callback_data=MileageChoose(action='mileage_bounds',
                                                                answer='до 100 000 км',

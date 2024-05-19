@@ -1,6 +1,5 @@
 # year_bounds_keyboard.py
 from datetime import datetime
-
 from aiogram import types
 from aiogram.filters.callback_data import CallbackData
 from aiogram.utils.keyboard import InlineKeyboardBuilder
@@ -52,3 +51,4 @@ def age_choose():
                                                                                year_right_bound=0).pack())
     )
     return kb.as_markup()
+

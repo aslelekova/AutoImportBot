@@ -1,9 +1,7 @@
 # config.py
 
-# URL for making requests.
 url_auto_ru = "https://auto.ru/-/ajax/desktop-search/listing/"
 
-# Headers required for the request.
 headers_auto_ru = {
     "Accept": "*/*",
     "Accept-Encoding": "gzip, deflate, br",
@@ -91,7 +89,7 @@ headers_auto_ru = {
               "/rR18wUOuxxAKjgkhQOpgGzrjeZeHg7mzL8xMpb+E0mi8YPRVVUoFDl4ElddDgQ=\"}",
 }
 
-TOKEN = '6739548567:AAGo66U7-sLAIjHuJ__Ef6SSP9TwgPRToeE'
+TOKEN = '6813401209:AAHRlAIkHUGC6Fi2iQT7DwoeD84kvSZC6AU'
 
 headers_encar_com = {
     'Accept': 'application/json, text/javascript, */*; q=0.01',

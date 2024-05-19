@@ -215,15 +215,29 @@ async def send_car_listings(message: types.Message, state: FSMContext):
 
 @router.callback_query(F.data == 'show_more_encar_com')
 async def show_more_callback(call: types.CallbackQuery, state: FSMContext):
+    """
+    Handler for the "Show More" button in Encar car listings.
+
+    :param call: The CallbackQuery object representing the incoming request.
+    :param state: The Finite State Machine context object.
+
+    :return: None
+    """
     fsm_data = await state.get_data()
     remaining_cards = fsm_data.get('remaining_cards', [])
     current_index = fsm_data.get('current_index', 0)
 
-    # Выводим следующие 5 карточек, начиная с текущего индекса
-    for card in remaining_cards[current_index:current_index + 4]:
+    # Display the next 5 cards starting from the current index.
+    for card in remaining_cards[current_index:current_index + 5]:
         await call.message.answer(card)
 
+    # Update the current index.
+    current_index += 5
+    await state.update_data(current_index=current_index)
+
+    # Check if there are more cards to display.
     if current_index < len(remaining_cards):
+        # If so, add the "Show More" button.
         await call.message.answer(
             remaining_cards[current_index + 4],
             reply_markup=InlineKeyboardMarkup(

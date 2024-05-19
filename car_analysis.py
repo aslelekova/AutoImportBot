@@ -84,6 +84,7 @@ def process_item_encar_com(item, brand, model, encoded_data_auto_ru):
     base_link_encar_com = f"http://www.encar.com/dc/dc_cardetailview.do?carid={id}"
 
     # ToDo: change price_won on price with taxes
+
     # Calculate car vector components.
     vector_encar_com.append(price_won * 10000 * get_rates()['KRW'][1])
     vector_encar_com.append(mileage)

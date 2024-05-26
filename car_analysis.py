@@ -1,10 +1,11 @@
 # car_analysis.py
+import datetime
 import locale
 
 from aiogram.utils.markdown import hbold, hlink
 from googletrans import Translator
+from pycbrf import ExchangeRates
 
-from count_price import get_rates
 from predict_cars_auto_ru import encode_fuel_type, compare_cars_encar_auto_ru
 
 
@@ -85,8 +86,11 @@ def process_item_encar_com(item, brand, model, encoded_data_auto_ru):
 
     # ToDo: change price_won on price with taxes
 
+    today = str(datetime.datetime.now())[:10]
+    rates_today = ExchangeRates(today)
+
     # Calculate car vector components.
-    vector_encar_com.append(price_won * 10000 * get_rates()['KRW'][1])
+    vector_encar_com.append(price_won * 10000 * float(rates_today['KRW'].rate))
     vector_encar_com.append(mileage)
 
     # Map Korean fuel types to English.
@@ -131,8 +135,10 @@ def translator_translate(word):
 def create_card(brand, model, generation_encar_com, year_encar_com, fuel_type_encar_com, base_link_encar_com,
                 formatted_mileage, formatted_price_won, encoded_data_encar_com, encoded_data_auto_ru):
     translated_fuel_type = translator_translate(fuel_type_encar_com)
+    today = str(datetime.datetime.now())[:10]
+    rates_today = ExchangeRates(today)
     locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
-    price_to_Russia = round((int(formatted_price_won.replace(' ', '')) + 3100000) * get_rates()['KRW'][1] + 335000)
+    price_to_Russia = round((int(formatted_price_won.replace(' ', '')) + 3100000) * float(rates_today['KRW'].rate) + 335000)
     formatted_price_to_Russia = locale.currency(price_to_Russia, grouping=True).split(',')[0]
     if not encoded_data_auto_ru:
         similar_cars_message = "Эта машина - эксклюзив!"

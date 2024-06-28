@@ -15,7 +15,7 @@ def encode_fuel_type(data):
     :return: A dictionary containing encoded car data.
     """
     # Create a DataFrame from the data.
-    df = pd.DataFrame(data.values(), columns=["Price", "Mileage", "Fuel Type", "Year"], index=data.keys())
+    df = pd.DataFrame(data.values(), columns=["Power", "Volume", "Mileage", "Fuel Type", "Year"], index=data.keys())
 
     # Convert the categorical variable 'Fuel Type' into numerical representation using One-Hot Encoding.
     fuel_types = ['GASOLINE', 'DIESEL', 'ELECTRO', 'HYBRID']
@@ -71,7 +71,7 @@ def compare_cars_encar_auto_ru(encoded_data_encar_com, encoded_data_auto_ru):
                 similarity_list.append((car_auto_ru, distance))
             except ValueError:
                 logging.error(f"Skipping comparison between {car_encar} and {car_auto_ru} due to incompatible types")
-
+                pass
     # Sort by distance and get top 3 closest cars.
     sorted_similarity_list = sorted(similarity_list, key=lambda x: x[1])
     top_3_closest = sorted_similarity_list[:3]
@@ -79,9 +79,9 @@ def compare_cars_encar_auto_ru(encoded_data_encar_com, encoded_data_auto_ru):
     if top_3_closest:
         return [car[0] for car in top_3_closest]
     else:
-        return "Эта машина - эксклюзив!"
+        return []
 
 
 # Configure logging
-logging.basicConfig(filename='car_comparison.log', level=logging.INFO,
+logging.basicConfig(filename='bot.log', level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')

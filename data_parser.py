@@ -2,8 +2,9 @@
 import json
 import logging
 import math
-from config import url_auto_ru, headers_auto_ru, url_encar_com, headers_encar_com
+import urllib.request as req
 import requests
+from config import url_auto_ru, headers_auto_ru, url_encar_com, headers_encar_com, cookies_encar_com
 
 logger = logging.getLogger(__name__)
 
@@ -32,8 +33,8 @@ def parse_auto_ru(brand_auto_ru, model_auto_ru, year_left_bound, year_right_boun
         params = {
             "transmission": None,
             "engine_group": fuel_type_auto_ru,
-            "year_from": int(year_left_bound),
-            "year_to": int(year_right_bound),
+            "year_from": year_left_bound,
+            "year_to": year_right_bound,
             "section": "all",
             "km_age_from": mileage_left_bound,
             "km_age_to": mileage_right_bound,
@@ -81,9 +82,12 @@ def parse_encar_com(brand_encar_com, model_encar_com, year_left_bound, year_righ
     :param mileage_right_bound: The right bound of the mileage range.
     :return: A list of car data parsed from encar.com.
     """
-    if mileage_right_bound == 0: mileage_right_bound = ''
-    if mileage_left_bound == 0: mileage_left_bound = ''
-    if year_left_bound == 0 and year_right_bound == 0: year_left_bound, year_right_bound = '', ''
+    if mileage_right_bound == 0:
+        mileage_right_bound = ''
+    if mileage_left_bound == 0:
+        mileage_left_bound = ''
+    if year_left_bound == 0 and year_right_bound == 0:
+        year_left_bound, year_right_bound = '0000', '9999'
 
     # Constructing parameters for the API request.
     if brand_encar_com in ["쉐보레(GM대우_)", "제네시스", "기아", "현대"]:
@@ -122,7 +126,7 @@ def parse_encar_com(brand_encar_com, model_encar_com, year_left_bound, year_righ
 
     all_data = []
 
-    response = requests.get(url_encar_com, params=params, headers=headers_encar_com)
+    response = requests.get(url_encar_com, params=params, headers=headers_encar_com, cookies=cookies_encar_com)
     # Processing the API response.
     if response.status_code == 200:
         try:
@@ -133,7 +137,8 @@ def parse_encar_com(brand_encar_com, model_encar_com, year_left_bound, year_righ
             # Iterating over all pages of the API response.
             for page in range(total_pages):
                 params["sr"] = f"|ModifiedDate|{page * 20}|20"
-                response = requests.get(url_encar_com, params=params, headers=headers_encar_com)
+                response = requests.get(url_encar_com, params=params, headers=headers_encar_com,
+                                        cookies=cookies_encar_com)
                 # Parsing JSON data from each page.
                 if response.status_code == 200:
                     try:

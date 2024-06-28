@@ -94,13 +94,19 @@ TOKEN = '6813401209:AAHRlAIkHUGC6Fi2iQT7DwoeD84kvSZC6AU'
 headers_encar_com = {
     'Accept': 'application/json, text/javascript, */*; q=0.01',
     'Accept-Encoding': 'gzip, deflate',
-    'Accept-Language': 'ru',
+    'Accept-Language': 'en-GB,en;q=0.9',
     'Connection': 'keep-alive',
     'Host': 'api.encar.com',
     'Origin': 'http://www.encar.com',
     'Referer': 'http://www.encar.com/',
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) '
-                  'Version/17.4.1 Safari/605.1.15'
+                  'Version/17.5 Safari/605.1.15'
+}
+
+cookies_encar_com = {
+    '_encar_hostname': 'http://www.encar.com',
+    'JSESSIONID': 'AiEXzi5OXu4Iq6uHO1yZTp4XXlNIemzzbND10RWNr5Mx1wHBzPnAoUA99nQ15oMy.mono-was2-prod_servlet_encarWeb4',
+    'WMONID': 'RKO5GUDOKi7'
 }
 
 url_encar_com = "http://api.encar.com/search/car/list/premium"

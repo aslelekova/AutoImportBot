@@ -4,7 +4,7 @@ import datetime
 from pycbrf import ExchangeRates
 
 
-def calculate_customs_fees(year_left_bound, year_right_bound, engine_volume, price_won, fuel_type):
+def calculate_customs_fees(year_encar_com, engine_volume, price_won, fuel_type):
     """
     Calculate the customs fees for a vehicle based on its age, engine volume, and price.
 
@@ -14,8 +14,7 @@ def calculate_customs_fees(year_left_bound, year_right_bound, engine_volume, pri
 
     :param fuel_type: The fuel type of the vehicle. Accepted values are 'ELECTRO' for electric vehicles and other
     types for non-electric vehicles.
-    :param year_left_bound: The left bound of the vehicle's manufacture year range (inclusive).
-    :param year_right_bound: The right bound of the vehicle's manufacture year range (inclusive).
+    :param year_encar_com: The year of manufacture of the car.
     :param engine_volume: The engine volume of the vehicle in cubic centimeters.
     :param price_won: The price of the vehicle in Korean Won.
     :return: The calculated customs fee in Euro.
@@ -28,7 +27,7 @@ def calculate_customs_fees(year_left_bound, year_right_bound, engine_volume, pri
     price_rub = price_won * krw_to_rub_rate
     price_eur = price_rub / eut_to_rub_rate
     if fuel_type != 'ELECTRO':
-        if year_left_bound >= current_year - 3 and year_right_bound <= current_year:
+        if current_year - 3 <= year_encar_com <= current_year:
             if price_eur <= 8500:
                 customs_fee = max(0.54 * price_won * krw_to_rub_rate, 2.5 * engine_volume * eut_to_rub_rate)
             elif 8500 < price_eur <= 16700:
@@ -41,7 +40,7 @@ def calculate_customs_fees(year_left_bound, year_right_bound, engine_volume, pri
                 customs_fee = max(0.48 * price_won * krw_to_rub_rate, 15 * engine_volume * eut_to_rub_rate)
             else:
                 customs_fee = max(0.48 * price_won * krw_to_rub_rate, 20 * engine_volume * eut_to_rub_rate)
-        elif year_left_bound >= current_year - 5 and year_right_bound < current_year - 3:
+        elif current_year - 5 <= year_encar_com < current_year - 3:
             if engine_volume <= 1000:
                 customs_fee = 1.5 * engine_volume * eut_to_rub_rate
             elif 1000 < engine_volume <= 1500:
@@ -54,7 +53,7 @@ def calculate_customs_fees(year_left_bound, year_right_bound, engine_volume, pri
                 customs_fee = 3.0 * engine_volume * eut_to_rub_rate
             else:
                 customs_fee = 3.6 * engine_volume * eut_to_rub_rate
-        elif year_left_bound < current_year - 5:
+        elif year_encar_com < current_year - 5:
             if engine_volume <= 1000:
                 customs_fee = 3.0 * engine_volume * eut_to_rub_rate
             elif 1000 < engine_volume <= 1500:
@@ -72,14 +71,12 @@ def calculate_customs_fees(year_left_bound, year_right_bound, engine_volume, pri
     return customs_fee
 
 
-def calculate_recycling_collection(year_left_bound, year_right_bound, engine_volume, fuel_type):
+def calculate_recycling_collection(year_encar_com, engine_volume, fuel_type):
     """
     Calculates the recycling collection fee for a vehicle based on its engine capacity, fuel type, and age.
 
-    :param year_left_bound: int
-        The lower bound of the vehicle's production year range.
-    :param year_right_bound: int
-        The upper bound of the vehicle's production year range.
+    :param year_encar_com: int
+        The year of manufacture of the car.
     :param engine_volume: int
         The engine capacity of the vehicle in cubic centimeters (cc).
     :param fuel_type: str
@@ -90,7 +87,7 @@ def calculate_recycling_collection(year_left_bound, year_right_bound, engine_vol
     """
     current_year = datetime.datetime.now().year
     if fuel_type != 'ELECTRO':
-        if year_left_bound >= current_year - 3 and year_right_bound <= current_year:
+        if current_year - 3 <= year_encar_com <= current_year:
             if 0 <= engine_volume <= 3000:
                 recycling_collection = 20000 * 0.17
             elif 3000 < engine_volume <= 3500:
@@ -105,7 +102,7 @@ def calculate_recycling_collection(year_left_bound, year_right_bound, engine_vol
             else:
                 recycling_collection = 20000 * 81.19
     else:
-        if year_left_bound >= current_year - 3 and year_right_bound <= current_year:
+        if current_year - 3 <= year_encar_com <= current_year:
             recycling_collection = 20000 * 0.17
         else:
             recycling_collection = 20000 * 0.26

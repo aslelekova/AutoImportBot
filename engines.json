@@ -5,10 +5,6 @@
         "engine_power": 116,
         "engine_volume_cc": 1598
       },
-      "30 TDI 디자인 에디션 스포트백": {
-        "engine_power": 116,
-        "engine_volume_cc": 1598
-      },
       "30 TDI 스포트 에디션 스포트백": {
         "engine_power": 116,
         "engine_volume_cc": 1598
@@ -298,7 +294,6 @@
         "engine_volume_cc": 1968
       },
       "35 TDI 콰트로 프리미엄": {
-        "complete_set": "Quattro Premium",
         "engine_power": 201,
         "engine_volume_cc": 1968
       },

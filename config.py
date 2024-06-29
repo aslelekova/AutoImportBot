@@ -103,10 +103,7 @@ headers_encar_com = {
                   'Version/17.5 Safari/605.1.15'
 }
 
-cookies_encar_com = {
-    '_encar_hostname': 'http://www.encar.com',
-    'JSESSIONID': 'AiEXzi5OXu4Iq6uHO1yZTp4XXlNIemzzbND10RWNr5Mx1wHBzPnAoUA99nQ15oMy.mono-was2-prod_servlet_encarWeb4',
-    'WMONID': 'RKO5GUDOKi7'
-}
-
 url_encar_com = "http://api.encar.com/search/car/list/premium"
+
+username = '01024451703'
+password = 'valentina1968'

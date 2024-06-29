@@ -2,9 +2,11 @@
 import json
 import logging
 import math
-import urllib.request as req
 import requests
-from config import url_auto_ru, headers_auto_ru, url_encar_com, headers_encar_com, cookies_encar_com
+from requests.auth import HTTPBasicAuth
+
+from config import url_auto_ru, headers_auto_ru, url_encar_com, headers_encar_com, username, password
+from test import get_cookies
 
 logger = logging.getLogger(__name__)
 
@@ -126,8 +128,7 @@ def parse_encar_com(brand_encar_com, model_encar_com, year_left_bound, year_righ
 
     all_data = []
 
-    response = requests.get(url_encar_com, params=params, headers=headers_encar_com, cookies=cookies_encar_com)
-    # Processing the API response.
+    response = requests.get(url_encar_com, params=params, headers=headers_encar_com, auth=HTTPBasicAuth(username, password))
     if response.status_code == 200:
         try:
             json_data = response.json()
@@ -137,8 +138,7 @@ def parse_encar_com(brand_encar_com, model_encar_com, year_left_bound, year_righ
             # Iterating over all pages of the API response.
             for page in range(total_pages):
                 params["sr"] = f"|ModifiedDate|{page * 20}|20"
-                response = requests.get(url_encar_com, params=params, headers=headers_encar_com,
-                                        cookies=cookies_encar_com)
+                response = requests.get(url_encar_com, params=params, headers=headers_encar_com, auth=HTTPBasicAuth(username, password))
                 # Parsing JSON data from each page.
                 if response.status_code == 200:
                     try:

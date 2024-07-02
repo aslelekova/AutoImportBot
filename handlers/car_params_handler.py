@@ -1,4 +1,5 @@
 # car_params_handler.py
+import asyncio
 import logging
 
 from aiogram.fsm.context import FSMContext
@@ -222,8 +223,8 @@ async def send_car_listings(message: types.Message, state: FSMContext):
         data_auto_ru)
 
     count = 0
-    remaining_cards = []
     first_five_cards = []
+
     for page_data in data_encar_com:
         for item in page_data.get("SearchResults", []):
             if count >= 5:
@@ -244,54 +245,59 @@ async def send_car_listings(message: types.Message, state: FSMContext):
     else:
         await message.answer(first_five_cards[-1])
 
-    for page_data in data_encar_com:
-        for item in page_data.get("SearchResults", []):
-            card = process_item_encar_com(item, brand_auto_ru, model_auto_ru, encoded_data_auto_ru)
-            if card is not None and card not in first_five_cards:
-                remaining_cards.append(card)
-    await state.update_data(remaining_cards=remaining_cards)
+    async def process_remaining_cards(data_encar_com, state):
+        remaining_cards = []
+        for page_data in data_encar_com:
+            for item in page_data.get("SearchResults", []):
+                card = process_item_encar_com(item, brand_auto_ru, model_auto_ru, encoded_data_auto_ru)
+                if card is not None and card not in first_five_cards:
+                    remaining_cards.append(card)
+                    if len(remaining_cards) % 5 == 0:
+                        await state.update_data(remaining_cards=remaining_cards)
+                        await asyncio.sleep(0.1)
+        await state.update_data(remaining_cards=remaining_cards)
 
+    asyncio.create_task(process_remaining_cards(data_encar_com, state))
 
-# TODO: change algorithm remaining_cards
+    await state.update_data(current_index=0)
 
+    @router.callback_query(F.data == 'show_more_encar_com')
+    async def show_more_callback(call: types.CallbackQuery, state: FSMContext):
+        """
+        Handler for the "Show More" button in Encar car listings.
 
-@router.callback_query(F.data == 'show_more_encar_com')
-async def show_more_callback(call: types.CallbackQuery, state: FSMContext):
-    """
-    Handler for the "Show More" button in Encar car listings.
+        :param call: The CallbackQuery object representing the incoming request.
+        :param state: The Finite State Machine context object.
 
-    :param call: The CallbackQuery object representing the incoming request.
-    :param state: The Finite State Machine context object.
+        :return: None
+        """
+        fsm_data = await state.get_data()
+        remaining_cards = fsm_data.get('remaining_cards', [])
+        current_index = fsm_data.get('current_index', 0)
 
-    :return: None
-    """
-    fsm_data = await state.get_data()
-    remaining_cards = fsm_data.get('remaining_cards', [])
-    current_index = fsm_data.get('current_index', 0)
+        # Calculate the range for the next batch of cards
+        next_batch = remaining_cards[current_index:current_index + 5]
 
-    # Calculate the range for the next batch of cards
-    next_batch = remaining_cards[current_index:current_index + 5]
-
-    # Display each card in the current batch
-    for i, card in enumerate(next_batch):
-        if i == len(next_batch) - 1 and current_index + 5 < len(remaining_cards):
-            # Add the "Show More" button under the last card of the current batch if there are more cards
-            await call.message.answer(
-                card,
-                reply_markup=InlineKeyboardMarkup(
-                    inline_keyboard=[
-                        [InlineKeyboardButton(text="Показать еще", callback_data="show_more_encar_com")]
-                    ]
+        # Display each card in the current batch
+        for i, card in enumerate(next_batch):
+            if i == len(next_batch) - 1 and current_index + 5 < len(remaining_cards):
+                # Add the "Show More" button under the last card of the current batch if there are more cards
+                await call.message.answer(
+                    card,
+                    reply_markup=InlineKeyboardMarkup(
+                        inline_keyboard=[
+                            [InlineKeyboardButton(text="Показать еще", callback_data="show_more_encar_com")]
+                        ]
+                    )
                 )
-            )
-        else:
-            await call.message.answer(card)
+            else:
+                await call.message.answer(card)
 
-    # Update the current index
-    current_index += 5
-    await state.update_data(current_index=current_index)
+        # Update the current index
+        current_index += 5
+        await state.update_data(current_index=current_index)
 
-    await call.answer()
+        await call.answer()
 
 
 async def restart_car_selection(message: types.Message, state: FSMContext):

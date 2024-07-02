@@ -6,7 +6,6 @@ import requests
 from requests.auth import HTTPBasicAuth
 
 from config import url_auto_ru, headers_auto_ru, url_encar_com, headers_encar_com, username, password
-from test import get_cookies
 
 logger = logging.getLogger(__name__)
 

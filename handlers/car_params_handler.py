@@ -158,10 +158,13 @@ async def get_mileage(call: types.CallbackQuery, callback_data: KB_mileage.Milea
 
 async def send_car_listings(message: types.Message, state: FSMContext):
     """
+    Sends car listings based on user-selected criteria, retrieves data from FSM context,
+    parses car data from external sources, saves data to JSON files, and manages
+    pagination for displaying car listings.
 
-    :param message:
-    :param state:
-    :return:
+    :param message: The message object containing user information.
+    :param state: The FSMContext object to retrieve and update conversation state.
+    :return: None
     """
     user_id = message.from_user.id
 
@@ -178,8 +181,9 @@ async def send_car_listings(message: types.Message, state: FSMContext):
     mileage_left_bound = fsm_data.get('mileage_left_bound')
     mileage_right_bound = fsm_data.get('mileage_right_bound')
 
+    # Format the selected criteria for display.
     if fuel_type_auto_ru == '':
-       print_fuel = 'не выбрано'
+        print_fuel = 'не выбрано'
     else:
         print_fuel = fuel_type_auto_ru.title()
     if year_left_bound == 0 and year_right_bound == 0:
@@ -191,6 +195,7 @@ async def send_car_listings(message: types.Message, state: FSMContext):
     else:
         print_mileage = f"{mileage_left_bound} - {mileage_right_bound}"
 
+    # Send a message confirming the selected criteria.
     await message.answer(
         f"✅Выбранные параметры:\n\n{hbold('Марка: ')}{brand_auto_ru}\n{hbold('Модель: ')}{model_auto_ru}\n"
         f"{hbold('Возраст: ')}{print_year}\n{hbold('Тип топлива: ')}{print_fuel}\n{hbold('Пробег: ')}{print_mileage}")
@@ -212,92 +217,103 @@ async def send_car_listings(message: types.Message, state: FSMContext):
     # Load data from encar.com JSON file.
     data_encar_com = load_data_from_json("data_encar_com.json")
 
+    # If no data is found in the encar.com JSON file, restart the car selection process.
     if not data_encar_com:
         logger.warning(f"User {user_id}: No data found in data_encar_com.json. Restarting car selection process.")
         await restart_car_selection(message, state)
         return
 
-    # Load data from auto.ru JSON file.
+    # Load data from the auto.ru JSON file and analyze it.
     data_auto_ru = load_data_from_json("data_auto_ru.json")
-    encoded_data_auto_ru = analyze_car_data_auto_ru(
-        data_auto_ru)
+    encoded_data_auto_ru = analyze_car_data_auto_ru(data_auto_ru)
+
+    await state.update_data(encoded_data_auto_ru=encoded_data_auto_ru)
 
     count = 0
     first_five_cards = []
 
+    # Form the first 5 cards and send them immediately
     for page_data in data_encar_com:
         for item in page_data.get("SearchResults", []):
             if count >= 5:
                 break
+
+            if item.get("ServiceCopyCar") == "DUPLICATION":
+                continue
 
             card = process_item_encar_com(item, brand_auto_ru, model_auto_ru, encoded_data_auto_ru)
             if card is not None:
                 first_five_cards.append(card)
                 count += 1
 
+    # Send the first 5 cards
     for i in range(len(first_five_cards) - 1):
         await message.answer(first_five_cards[i])
 
     if len(first_five_cards) > 4:
         await message.answer(first_five_cards[-1], reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="Показать еще", callback_data="show_more_encar_com")]
+            [InlineKeyboardButton(text="Show More", callback_data="show_more_encar_com")]
         ]))
     else:
         await message.answer(first_five_cards[-1])
 
-    async def process_remaining_cards(data_encar_com, state):
-        remaining_cards = []
-        for page_data in data_encar_com:
-            for item in page_data.get("SearchResults", []):
-                card = process_item_encar_com(item, brand_auto_ru, model_auto_ru, encoded_data_auto_ru)
-                if card is not None and card not in first_five_cards:
-                    remaining_cards.append(card)
-                    if len(remaining_cards) % 5 == 0:
-                        await state.update_data(remaining_cards=remaining_cards)
-                        await asyncio.sleep(0.1)
-        await state.update_data(remaining_cards=remaining_cards)
+    # Update state with the current index
+    await state.update_data(current_index=count, data_encar_com=data_encar_com)
 
-    asyncio.create_task(process_remaining_cards(data_encar_com, state))
 
-    await state.update_data(current_index=0)
+@router.callback_query(F.data == 'show_more_encar_com')
+async def show_more_callback(call: types.CallbackQuery, state: FSMContext):
+    fsm_data = await state.get_data()
+    current_index = fsm_data.get('current_index', 0)
+    data_encar_com = fsm_data.get('data_encar_com', [])
+    brand_auto_ru = fsm_data.get('brand_auto_ru')
+    model_auto_ru = fsm_data.get('model_auto_ru')
+    encoded_data_auto_ru = fsm_data.get('encoded_data_auto_ru')
 
-    @router.callback_query(F.data == 'show_more_encar_com')
-    async def show_more_callback(call: types.CallbackQuery, state: FSMContext):
-        """
-        Handler for the "Show More" button in Encar car listings.
+    next_batch = []
+    count = 0
+    item_count = 0
 
-        :param call: The CallbackQuery object representing the incoming request.
-        :param state: The Finite State Machine context object.
+    # Form the next batch of 5 cards starting from current_index
+    for page_data in data_encar_com:
+        for item in page_data.get("SearchResults", []):
+            if item_count < current_index:
+                if item.get("ServiceCopyCar") != "DUPLICATION":
+                    item_count += 1
+                continue
 
-        :return: None
-        """
-        fsm_data = await state.get_data()
-        remaining_cards = fsm_data.get('remaining_cards', [])
-        current_index = fsm_data.get('current_index', 0)
+            if count >= 5:
+                break
 
-        # Calculate the range for the next batch of cards
-        next_batch = remaining_cards[current_index:current_index + 5]
+            if item.get("ServiceCopyCar") == "DUPLICATION" or item.get("Price", "") == 0 or item.get("Price", "") == 9999.0 or item.get("Price", "") == 99999.0:
+                continue
 
-        # Display each card in the current batch
-        for i, card in enumerate(next_batch):
-            if i == len(next_batch) - 1 and current_index + 5 < len(remaining_cards):
-                # Add the "Show More" button under the last card of the current batch if there are more cards
-                await call.message.answer(
-                    card,
-                    reply_markup=InlineKeyboardMarkup(
-                        inline_keyboard=[
-                            [InlineKeyboardButton(text="Показать еще", callback_data="show_more_encar_com")]
-                        ]
-                    )
-                )
-            else:
-                await call.message.answer(card)
+            card = process_item_encar_com(item, brand_auto_ru, model_auto_ru, encoded_data_auto_ru)
+            if card is not None:
+                next_batch.append(card)
+                count += 1
 
-        # Update the current index
-        current_index += 5
-        await state.update_data(current_index=current_index)
+            item_count += 1
 
-        await call.answer()
+        if count >= 5:
+            break
+
+    # Send the next batch of cards
+    for i in range(len(next_batch) - 1):
+        await call.message.answer(next_batch[i])
+
+    if len(next_batch) > 4:
+        await call.message.answer(next_batch[-1], reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="Show More", callback_data="show_more_encar_com")]
+        ]))
+    else:
+        await call.message.answer(next_batch[-1])
+
+    # Update state with the new current index
+    current_index += count  # Update current_index by the number of new cards sent
+    await state.update_data(current_index=current_index)
+
+    await call.answer()
 
 
 async def restart_car_selection(message: types.Message, state: FSMContext):
@@ -307,7 +323,6 @@ async def restart_car_selection(message: types.Message, state: FSMContext):
     :param state: The FSM context containing information about the current chat state.
     :return: None
     """
-    user_id = message.from_user.id
     await state.clear()
     await message.answer(
         f"{hbold('Таких машин не найдено.')} Выберите другие параметры.\n\n🚘 Какая марка вас интересует?\n",

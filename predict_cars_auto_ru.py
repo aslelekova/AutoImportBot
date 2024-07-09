@@ -76,10 +76,7 @@ def compare_cars_encar_auto_ru(encoded_data_encar_com, encoded_data_auto_ru):
     sorted_similarity_list = sorted(similarity_list, key=lambda x: x[1])
     top_3_closest = sorted_similarity_list[:3]
 
-    if top_3_closest:
-        return [car[0] for car in top_3_closest]
-    else:
-        return []
+    return [car[0] for car in top_3_closest] if top_3_closest else []
 
 
 # Configure logging

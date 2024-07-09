@@ -32,7 +32,6 @@ def analyze_car_data_auto_ru(data_auto_ru):
         model_auto_ru = item.get("vehicle_info", {}).get("model_info", {}).get("code", "").lower()
         generation_auto_ru = item.get("vehicle_info", {}).get("super_gen", {}).get("name", "").lower()
         year_auto_ru = item.get("documents", {}).get("year", {})
-        price_rub = item.get("price_info", {}).get("price", "")
         mileage = item.get("state", {}).get("mileage", "")
         fuel_type = item.get("vehicle_info", {}).get("tech_param", {}).get("engine_type", "")
 
@@ -97,9 +96,6 @@ def process_item_encar_com(item, brand, model, encoded_data_auto_ru):
     if fuel_type_encar_com == "수소":
         return None
 
-    today = str(datetime.datetime.now())[:10]
-    rates_today = ExchangeRates(today)
-
     engines_data = load_data_from_json("engines.json")
     engine_power = engines_data.get(brand, {}).get(model, {}).get(generation_encar_com, {}).get('engine_power')
     engine_volume_cc = engines_data.get(brand, {}).get(model, {}).get(generation_encar_com, {}).get('engine_volume_cc')
@@ -131,6 +127,19 @@ def process_item_encar_com(item, brand, model, encoded_data_auto_ru):
 
 def create_link_auto_ru(brand_auto_ru, model_auto_ru, sale_id, tech_param_id, complectation_id, is_used,
                         generation_auto_ru, year_auto_ru):
+    """
+    Creates a hyperlink for a car listing on auto.ru based on provided parameters.
+
+    :param brand_auto_ru: The brand of the car on auto.ru.
+    :param model_auto_ru: The model of the car on auto.ru.
+    :param sale_id: The unique sale identifier for the car listing.
+    :param tech_param_id: The technical parameter identifier for the car listing.
+    :param complectation_id: The complectation identifier for the car listing.
+    :param is_used: Boolean indicating if the car is used (True) or new (False).
+    :param generation_auto_ru: The generation of the car on auto.ru.
+    :param year_auto_ru: The year of the car on auto.ru.
+    :return: A formatted hyperlink string for the car listing.
+    """
     # Formatting the base part of the link.
     base_link = f"https://auto.ru/cars/"
 

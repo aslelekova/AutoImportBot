@@ -89,7 +89,7 @@ headers_auto_ru = {
               "/rR18wUOuxxAKjgkhQOpgGzrjeZeHg7mzL8xMpb+E0mi8YPRVVUoFDl4ElddDgQ=\"}",
 }
 
-TOKEN = '6813401209:AAHRlAIkHUGC6Fi2iQT7DwoeD84kvSZC6AU'
+TOKEN = '7046062695:AAHh3LLkR7sG8AAhMwmoULeDa4W0UrA4cAg'
 
 headers_encar_com = {
     'Accept': 'application/json, text/javascript, */*; q=0.01',

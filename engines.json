@@ -11528,7 +11528,7 @@
     }
   },
   "MASERATI": {
-    "Ghibli": {
+    "GHIBLI": {
       "3.0 그란루쏘": {
         "engine_power": 345,
         "engine_volume_cc": 2979
@@ -12864,7 +12864,7 @@
         "engine_volume_cc": 5461
       }
     },
-    "GLA_KLASSE": {
+    "GLA_CLASS": {
       "GLA200 d 4MATIC 액티비티 에디션": {
         "engine_power": 136,
         "engine_volume_cc": 2143
@@ -14620,7 +14620,7 @@
         "engine_volume_cc": 3956
       }
     },
-    "86": {
+    "GR86": {
       "2.4 스탠다드": {
         "engine_power": 197,
         "engine_volume_cc": 1998
@@ -14660,7 +14660,7 @@
         "engine_volume_cc": 1798
       }
     },
-    "RAV4": {
+    "RAV_4": {
       "2.5 2WD": {
         "engine_power": 203,
         "engine_volume_cc": 2487
@@ -14728,6 +14728,12 @@
         "engine_volume_cc": 3000
       }
     },
+    "TACOMA": {
+      "3.5": {
+        "engine_power": 278,
+        "engine_volume_cc": 3456
+      }
+    },
     "TUNDRA": {
       "4.7": {
         "engine_power": 271,
@@ -14765,16 +14771,44 @@
       }
     },
     "BEETLE": {
-      "1.4 TSI": {
-        "engine_power": 150,
-        "engine_volume_cc": 1395
+      "클래식": {
+        "engine_power": 115,
+        "engine_volume_cc": 1984
       },
-      "2.0 TSI": {
-        "engine_power": 220,
+      "2.5": {
+        "engine_power": 170,
+        "engine_volume_cc": 2480
+      },
+      "GLS 1.9L TDI": {
+        "engine_power": 90,
+        "engine_volume_cc": 1896
+      },
+      "2.0 TDI 클럽 리미티드 에디션": {
+        "engine_power": 140,
+        "engine_volume_cc": 1968
+      },
+      "2.0 카브리올레": {
+        "engine_power": 115,
+        "engine_volume_cc": 1984
+      },
+      "DELUXE 2.0": {
+        "engine_power": 115,
+        "engine_volume_cc": 1984
+      },
+      "2.0 TDI 프리미엄": {
+        "engine_power": 140,
+        "engine_volume_cc": 1968
+      },
+      "GLX 1.8T": {
+        "engine_power": 150,
+        "engine_volume_cc": 1781
+      },
+      "GL 2.0L": {
+        "engine_power": 115,
         "engine_volume_cc": 1984
       },
       "2.0 TDI": {
-        "engine_power": 150,
+        "engine_power": 140,
         "engine_volume_cc": 1968
       }
     },
@@ -15148,7 +15182,7 @@
         "engine_volume_cc": 2435
       }
     },
-    "VOLVO_S60": {
+    "S60": {
       "T5 R-디자인": {
         "engine_power": 250,
         "engine_volume_cc": 1969

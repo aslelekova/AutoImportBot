@@ -1184,7 +1184,7 @@ def model_choose(brand_auto_ru):
                                                                  model_encar_com='클럽맨').pack()),
             types.InlineKeyboardButton(text="Countryman",
                                        callback_data=ModelChoose(action='model_car', answer='Countryman',
-                                                                 model_auto_ru='CONTRYMAN',
+                                                                 model_auto_ru='COUNTRYMAN',
                                                                  model_encar_com='컨트리맨').pack()),
             types.InlineKeyboardButton(text="Coupe",
                                        callback_data=ModelChoose(action='model_car', answer='Coupe',
@@ -1268,7 +1268,7 @@ def model_choose(brand_auto_ru):
                                                                  model_encar_com='911').pack()),
             types.InlineKeyboardButton(text="Boxster",
                                        callback_data=ModelChoose(action='model_car', answer='Boxster',
-                                                                 model_auto_ru='BOXTER',
+                                                                 model_auto_ru='BOXSTER',
                                                                  model_encar_com='박스터').pack()),
             types.InlineKeyboardButton(text="Cayenne",
                                        callback_data=ModelChoose(action='model_car', answer='Cayenne',
@@ -1361,7 +1361,7 @@ def model_choose(brand_auto_ru):
                                                                  model_encar_com='프리우스').pack()),
             types.InlineKeyboardButton(text="RAV4",
                                        callback_data=ModelChoose(action='model_car', answer='RAV4',
-                                                                 model_auto_ru='RAV4',
+                                                                 model_auto_ru='RAV_4',
                                                                  model_encar_com='RAV4').pack())
         )
         kb.row(

@@ -18,6 +18,24 @@ This Telegram bot helps users evaluate the cost-effectiveness of importing cars 
 - Telegram Bot API token
 - Docker
 
+### Configuration
+
+Update the `config.py` file in the root directory of the project with your Telegram Bot API token:
+
+```python
+TOKEN = 'your_telegram_bot_token_here'
+```
+
+Replace `'your_telegram_bot_token_here'` with your actual Telegram Bot API token.
+
+### Install Dependencies
+
+Install the required packages:
+
+```bash
+pip install -r requirements.txt
+```
+
 ### Clone the Repository
 
 ```bash
@@ -41,24 +59,6 @@ docker run -d autoimportbot:latest
 ```
 
 This command starts the AutoImportBot container in detached mode (`-d`), executing the bot inside the Docker container.
-
-### Install Dependencies
-
-Install the required packages:
-
-```bash
-pip install -r requirements.txt
-```
-
-### Configuration
-
-Update the `config.py` file in the root directory of the project with your Telegram Bot API token:
-
-```python
-TOKEN = 'your_telegram_bot_token_here'
-```
-
-Replace `'your_telegram_bot_token_here'` with your actual Telegram Bot API token.
 
 ### Run the Bot
 

@@ -101,7 +101,7 @@ def model_choose(brand_auto_ru):
                                                                  model_encar_com='RS7').pack()),
             types.InlineKeyboardButton(text="RSQ8",
                                        callback_data=ModelChoose(action='model_car', answer='RSQ8',
-                                                                 model_auto_ru='RSQ8',
+                                                                 model_auto_ru='RS_Q8',
                                                                  model_encar_com='RSQ8').pack()),
             types.InlineKeyboardButton(text="S3",
                                        callback_data=ModelChoose(action='model_car', answer='S3',
@@ -184,7 +184,7 @@ def model_choose(brand_auto_ru):
                                                                  model_encar_com='3시리즈').pack()),
             types.InlineKeyboardButton(text="4 серии",
                                        callback_data=ModelChoose(action='model_car', answer='4 серии',
-                                                                 model_auto_ru='4ER',
+                                                                 model_auto_ru='4',
                                                                  model_encar_com='4시리즈').pack())
         )
         kb.row(
@@ -420,11 +420,11 @@ def model_choose(brand_auto_ru):
         kb.row(
             types.InlineKeyboardButton(text="296",
                                        callback_data=ModelChoose(action='model_car', answer='296',
-                                                                 model_auto_ru='296',
+                                                                 model_auto_ru='296_GTB',
                                                                  model_encar_com='296').pack()),
             types.InlineKeyboardButton(text="360",
                                        callback_data=ModelChoose(action='model_car', answer='360',
-                                                                 model_auto_ru='360',
+                                                                 model_auto_ru='360_MODENA',
                                                                  model_encar_com='360').pack()),
             types.InlineKeyboardButton(text="456",
                                        callback_data=ModelChoose(action='model_car', answer='456',
@@ -432,7 +432,7 @@ def model_choose(brand_auto_ru):
                                                                  model_encar_com='456').pack()),
             types.InlineKeyboardButton(text="458",
                                        callback_data=ModelChoose(action='model_car', answer='458',
-                                                                 model_auto_ru='458',
+                                                                 model_auto_ru='458_ITALIA',
                                                                  model_encar_com='458').pack())
         )
         kb.row(
@@ -446,11 +446,11 @@ def model_choose(brand_auto_ru):
                                                                  model_encar_com='599').pack()),
             types.InlineKeyboardButton(text="812",
                                        callback_data=ModelChoose(action='model_car', answer='812',
-                                                                 model_auto_ru='812',
+                                                                 model_auto_ru='812_SUPERFAST',
                                                                  model_encar_com='812').pack()),
             types.InlineKeyboardButton(text="F8",
                                        callback_data=ModelChoose(action='model_car', answer='F8',
-                                                                 model_auto_ru='F8',
+                                                                 model_auto_ru='F8_TRIBUTO',
                                                                  model_encar_com='F8').pack())
 
         )
@@ -466,7 +466,7 @@ def model_choose(brand_auto_ru):
                                                                  model_encar_com='FF').pack()),
             types.InlineKeyboardButton(text="SF90",
                                        callback_data=ModelChoose(action='model_car', answer='SF90',
-                                                                 model_auto_ru='SF90',
+                                                                 model_auto_ru='SF90_STRADALE',
                                                                  model_encar_com='SF90').pack()),
             types.InlineKeyboardButton(text="Roma",
                                        callback_data=ModelChoose(action='model_car', answer='Roma',
@@ -832,7 +832,7 @@ def model_choose(brand_auto_ru):
                                                                  model_encar_com='로체').pack()),
             types.InlineKeyboardButton(text="Mohave",
                                        callback_data=ModelChoose(action='model_car', answer='Mohave',
-                                                                 model_auto_ru='MOHAVE',
+                                                                 model_auto_ru='MOHAVES',
                                                                  model_encar_com='모하비').pack())
         )
         kb.row(
@@ -878,7 +878,7 @@ def model_choose(brand_auto_ru):
                                                                  model_encar_com='쏘울').pack()),
             types.InlineKeyboardButton(text="Sportage",
                                        callback_data=ModelChoose(action='model_car', answer='Sportage',
-                                                                 model_auto_ru='Sportage',
+                                                                 model_auto_ru='SPORTAGE',
                                                                  model_encar_com='스포티지').pack()),
             types.InlineKeyboardButton(text="Stinger",
                                        callback_data=ModelChoose(action='model_car', answer='Stinger',

@@ -1,11 +1,9 @@
 # car_analysis.py
-import datetime
 import locale
 import logging
 
 import translator
 from aiogram.utils.markdown import hlink
-from pycbrf import ExchangeRates
 
 from card_handler import create_card
 from file_handler import load_data_from_json
@@ -27,6 +25,7 @@ def analyze_car_data_auto_ru(data_auto_ru):
     vectors_auto_ru = {}
     for item in data_auto_ru:
         vector_auto_ru = []
+
         # Extracting brand, model, and price information from the data.
         brand_auto_ru = item.get("vehicle_info", {}).get("mark_info", {}).get("code", "").lower()
         model_auto_ru = item.get("vehicle_info", {}).get("model_info", {}).get("code", "").lower()
@@ -44,8 +43,8 @@ def analyze_car_data_auto_ru(data_auto_ru):
         tech_param_id = item.get("vehicle_info", {}).get("tech_param", {}).get("id", "")
         sale_id = item.get("saleId", "")
 
-        base_link_auto_ru = create_link_auto_ru(brand_auto_ru, model_auto_ru, sale_id, tech_param_id, complectation_id, is_used,
-                                                generation_auto_ru, year_auto_ru)
+        base_link_auto_ru = create_link_auto_ru(brand_auto_ru, model_auto_ru, sale_id, tech_param_id, complectation_id,
+                                                is_used, generation_auto_ru, year_auto_ru)
 
         vector_auto_ru.append(engine_power)
         vector_auto_ru.append(engine_volume)
@@ -53,6 +52,7 @@ def analyze_car_data_auto_ru(data_auto_ru):
         vector_auto_ru.append(fuel_type)
         vector_auto_ru.append(year_auto_ru)
         vectors_auto_ru[base_link_auto_ru] = vector_auto_ru
+
     encoded_data_auto_ru = encode_fuel_type(vectors_auto_ru)
 
     return encoded_data_auto_ru
@@ -69,6 +69,7 @@ def process_item_encar_com(item, brand, model, encoded_data_auto_ru):
     :return: A card containing information about the car.
     """
     vector_encar_com = []
+
     # Check if the car is a duplicate or not.
     service_copy_car = item.get("ServiceCopyCar", "")
     if service_copy_car == "DUPLICATION":
@@ -93,7 +94,7 @@ def process_item_encar_com(item, brand, model, encoded_data_auto_ru):
     fuel_type_encar_com = item.get("FuelType", "")
     base_link_encar_com = f"http://www.encar.com/dc/dc_cardetailview.do?carid={id}"
 
-    if fuel_type_encar_com == "수소":
+    if fuel_type_encar_com == "수소" or fuel_type_encar_com == "LPG(일반인 구입)":
         return None
 
     engines_data = load_data_from_json("engines.json")
@@ -120,6 +121,7 @@ def process_item_encar_com(item, brand, model, encoded_data_auto_ru):
 
     # Encode fuel type and create car card.
     encoded_data_encar_com = encode_fuel_type({base_link_encar_com: vector_encar_com})
+
     return create_card(brand, model, translated_generation, year_encar_com, fuel_type_encar_com,
                        base_link_encar_com, formatted_mileage, formatted_price_won,
                        encoded_data_encar_com, encoded_data_auto_ru, engine_power, engine_volume_cc)
@@ -140,6 +142,7 @@ def create_link_auto_ru(brand_auto_ru, model_auto_ru, sale_id, tech_param_id, co
     :param year_auto_ru: The year of the car on auto.ru.
     :return: A formatted hyperlink string for the car listing.
     """
+
     # Formatting the base part of the link.
     base_link = f"https://auto.ru/cars/"
 
@@ -152,4 +155,5 @@ def create_link_auto_ru(brand_auto_ru, model_auto_ru, sale_id, tech_param_id, co
 
     link = hlink(f'{brand_auto_ru.upper()} {model_auto_ru.upper()} {generation_auto_ru.upper()} {year_auto_ru}',
                  base_link)
+
     return link

@@ -39,15 +39,18 @@ def normalize_data_dict(data_dict):
     :return: A normalized dictionary of car data.
     """
     scaler = StandardScaler()
-    # Create a list of vectors from the dictionary values.
     vectors = list(data_dict.values())
+
     # Fit the StandardScaler to the data.
     scaler.fit(vectors)
+
     # Apply normalization to all vectors.
     normalized_vectors = scaler.transform(vectors)
+
     # Replace values in the dictionary with normalized vectors.
     for key, vector in zip(data_dict.keys(), normalized_vectors):
         data_dict[key] = vector
+
     return data_dict
 
 
@@ -59,7 +62,9 @@ def compare_cars_encar_auto_ru(encoded_data_encar_com, encoded_data_auto_ru):
     :param encoded_data_auto_ru: Encoded car data from auto.ru.
     :return: A list of top 3 closest cars from auto.ru for each car from encar.com.
     """
+
     similarity_list = []
+
     for car_encar, vector_encar in encoded_data_encar_com.items():
         for car_auto_ru, vector_auto_ru in encoded_data_auto_ru.items():
             try:
@@ -72,6 +77,7 @@ def compare_cars_encar_auto_ru(encoded_data_encar_com, encoded_data_auto_ru):
             except ValueError:
                 logging.error(f"Skipping comparison between {car_encar} and {car_auto_ru} due to incompatible types")
                 pass
+
     # Sort by distance and get top 3 closest cars.
     sorted_similarity_list = sorted(similarity_list, key=lambda x: x[1])
     top_3_closest = sorted_similarity_list[:3]

@@ -17,6 +17,15 @@ dp = Dispatcher()
 
 
 async def main():
+    """
+    Main entry point for the bot application.
+
+    This function initializes the bot by including necessary routers for handling
+    different commands and events. It then starts polling to receive updates and
+    handle user interactions in real-time.
+
+    :return: None
+    """
     try:
         dp.include_router(start_handler.router)
         dp.include_router(car_params_handler.router)
@@ -29,5 +38,3 @@ async def main():
 if __name__ == "__main__":
     import asyncio
     asyncio.run(main())
-
-# ToDo: add token in env

@@ -42,6 +42,7 @@ async def handle_help(message: types.Message):
                               "wa.me/79802120669\n🔗Сайт: https://pride-cars.com/"
 )
 
+
 @router.message(Command("restart"))
 async def restart_command(message: types.Message, state: FSMContext):
     """

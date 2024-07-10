@@ -31,6 +31,7 @@ def create_card(brand, model, generation_encar_com, year_encar_com, fuel_type_en
     :param engine_volume_cc: The engine volume of the car in cubic centimeters.
     :return: A formatted string containing the car listing card.
     """
+
     # Translate fuel type to Russian.
     translated_fuel_type = translator_translate(fuel_type_encar_com)
 
@@ -49,7 +50,8 @@ def create_card(brand, model, generation_encar_com, year_encar_com, fuel_type_en
     else:
         customs_fees = calculate_customs_fees(int(year_encar_com), engine_volume_cc,
                                               int(formatted_price_won.replace(' ', '')), fuel_type_encar_com)
-        recycling_collection = calculate_recycling_collection(int(year_encar_com), engine_volume_cc, fuel_type_encar_com)
+        recycling_collection = calculate_recycling_collection(int(year_encar_com), engine_volume_cc,
+                                                              fuel_type_encar_com)
         fee = calculate_customs_clearance(int(formatted_price_won.replace(' ', '')))
         excise_tax = calculate_excise_tax(engine_power, fuel_type_encar_com)
         vat = calculate_vat(int(formatted_price_won.replace(' ', '')), customs_fees, excise_tax, fuel_type_encar_com)

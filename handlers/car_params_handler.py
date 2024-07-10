@@ -1,5 +1,4 @@
 # car_params_handler.py
-import asyncio
 import logging
 
 from aiogram.fsm.context import FSMContext
@@ -149,7 +148,8 @@ async def get_mileage(call: types.CallbackQuery, callback_data: KB_mileage.Milea
         await send_car_listings(call.message, state)
 
         logger.info(
-            f"User {user_id} selected mileage bounds: {callback_data.mileage_left_bound}-{callback_data.mileage_right_bound}")
+            f"User {user_id} selected mileage bounds: {callback_data.mileage_left_bound}-"
+            f"{callback_data.mileage_right_bound}")
 
     except Exception as e:
         logger.error(f"Error in get_mileage for user {user_id}: {e}")
@@ -232,7 +232,7 @@ async def send_car_listings(message: types.Message, state: FSMContext):
     count = 0
     first_five_cards = []
 
-    # Form the first 5 cards and send them immediately
+    # Form the first 5 cards and send them immediately.
     for page_data in data_encar_com:
         for item in page_data.get("SearchResults", []):
             if count >= 5:
@@ -246,7 +246,7 @@ async def send_car_listings(message: types.Message, state: FSMContext):
                 first_five_cards.append(card)
                 count += 1
 
-    # Send the first 5 cards
+    # Send the first 5 cards.
     for i in range(len(first_five_cards) - 1):
         await message.answer(first_five_cards[i])
 
@@ -257,12 +257,24 @@ async def send_car_listings(message: types.Message, state: FSMContext):
     else:
         await message.answer(first_five_cards[-1])
 
-    # Update state with the current index
+    # Update state with the current index.
     await state.update_data(current_index=count, data_encar_com=data_encar_com)
 
 
 @router.callback_query(F.data == 'show_more_encar_com')
 async def show_more_callback(call: types.CallbackQuery, state: FSMContext):
+    """
+    Handles the 'Show More' button callback to display additional car listings.
+
+    This function retrieves the current index and car data from the FSM context,
+    generates the next batch of 5 car listings starting from the current index,
+    and sends these listings to the user. It also updates the current index in
+    the FSM context to reflect the number of new cards sent.
+
+    :param call: The callback query object containing information about the 'Show More' button press.
+    :param state: The FSMContext object to retrieve and update conversation state.
+    :return: None
+    """
     fsm_data = await state.get_data()
     current_index = fsm_data.get('current_index', 0)
     data_encar_com = fsm_data.get('data_encar_com', [])
@@ -274,7 +286,7 @@ async def show_more_callback(call: types.CallbackQuery, state: FSMContext):
     count = 0
     item_count = 0
 
-    # Form the next batch of 5 cards starting from current_index
+    # Form the next batch of 5 cards starting from current_index.
     for page_data in data_encar_com:
         for item in page_data.get("SearchResults", []):
             if item_count < current_index:
@@ -285,7 +297,8 @@ async def show_more_callback(call: types.CallbackQuery, state: FSMContext):
             if count >= 5:
                 break
 
-            if item.get("ServiceCopyCar") == "DUPLICATION" or item.get("Price", "") == 0 or item.get("Price", "") == 9999.0 or item.get("Price", "") == 99999.0:
+            if (item.get("ServiceCopyCar") == "DUPLICATION" or item.get("Price", "") == 0 or
+                    item.get("Price", "") == 9999.0 or item.get("Price", "") == 99999.0):
                 continue
 
             card = process_item_encar_com(item, brand_auto_ru, model_auto_ru, encoded_data_auto_ru)
@@ -298,7 +311,7 @@ async def show_more_callback(call: types.CallbackQuery, state: FSMContext):
         if count >= 5:
             break
 
-    # Send the next batch of cards
+    # Send the next batch of cards.
     for i in range(len(next_batch) - 1):
         await call.message.answer(next_batch[i])
 
@@ -309,8 +322,8 @@ async def show_more_callback(call: types.CallbackQuery, state: FSMContext):
     else:
         await call.message.answer(next_batch[-1])
 
-    # Update state with the new current index
-    current_index += count  # Update current_index by the number of new cards sent
+    # Update state with the new current index.
+    current_index += count
     await state.update_data(current_index=current_index)
 
     await call.answer()
@@ -333,7 +346,9 @@ async def restart_car_selection(message: types.Message, state: FSMContext):
 @router.message()
 async def handle_random_message(message: types.Message):
     """
-    Function handle_random_message is responsible for handling random messages that the bot cannot process. It sends a reply to the user indicating that the message cannot be processed and suggests writing '/help' for more detailed information.
+    Function handle_random_message is responsible for handling random messages that the bot cannot process. It sends a
+    reply to the user indicating that the message cannot be processed and suggests writing '/help' for more detailed
+    information.
 
     :param message: The message received by the bot.
     :return: None

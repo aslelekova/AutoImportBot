@@ -26,6 +26,7 @@ def calculate_customs_fees(year_encar_com, engine_volume, price_won, fuel_type):
     eut_to_rub_rate = float(rates_today['EUR'].rate)
     price_rub = price_won * krw_to_rub_rate
     price_eur = price_rub / eut_to_rub_rate
+
     if fuel_type != 'ELECTRO':
         if current_year - 3 <= year_encar_com <= current_year:
             if price_eur <= 8500:
@@ -68,6 +69,7 @@ def calculate_customs_fees(year_encar_com, engine_volume, price_won, fuel_type):
                 customs_fee = 5.7 * engine_volume * eut_to_rub_rate
     else:
         customs_fee = 0.15 * price_won * krw_to_rub_rate
+
     return customs_fee
 
 
@@ -85,7 +87,9 @@ def calculate_recycling_collection(year_encar_com, engine_volume, fuel_type):
     :return: float
         The calculated recycling collection fee for the vehicle.
     """
+
     current_year = datetime.datetime.now().year
+
     if fuel_type != 'ELECTRO':
         if current_year - 3 <= year_encar_com <= current_year:
             if 0 <= engine_volume <= 3000:
@@ -106,6 +110,7 @@ def calculate_recycling_collection(year_encar_com, engine_volume, fuel_type):
             recycling_collection = 20000 * 0.17
         else:
             recycling_collection = 20000 * 0.26
+
     return recycling_collection
 
 
@@ -116,9 +121,11 @@ def calculate_customs_clearance(price_won):
    :param price_won: Price of the vehicle
    :return: Customs clearance fee in euros
    """
+
     today = str(datetime.datetime.now())[:10]
     rates_today = ExchangeRates(today)
     price_rub = float(rates_today['KRW'].rate) * price_won
+
     if price_rub <= 200000:
         fee = 775
     elif price_rub <= 450000:
@@ -145,32 +152,34 @@ def calculate_customs_clearance(price_won):
     return fee
 
 
-def calculate_excise_tax(engine_power_hp, fuel_type):
+def calculate_excise_tax(engine_power, fuel_type):
     """
     Calculate the excise tax for an electric vehicle based on engine power.
 
     :param fuel_type: The fuel type of the vehicle. Accepted values are 'ELECTRO' for electric vehicles and other
     types for non-electric vehicles.
-    :param engine_power_hp: Engine power in horsepower (hp).
+    :param engine_power: Engine power in horsepower (hp).
     :return: The excise tax in rubles.
     """
+
     if fuel_type == 'ELECTRO':
-        if engine_power_hp <= 90:
+        if engine_power <= 90:
             excise_tax = 0
-        elif 90 < engine_power_hp <= 150:
-            excise_tax = 58 * engine_power_hp
-        elif 150 < engine_power_hp <= 200:
-            excise_tax = 557 * engine_power_hp
-        elif 200 < engine_power_hp <= 300:
-            excise_tax = 912 * engine_power_hp
-        elif 300 < engine_power_hp <= 400:
-            excise_tax = 1555 * engine_power_hp
-        elif 400 < engine_power_hp <= 500:
-            excise_tax = 1609 * engine_power_hp
+        elif 90 < engine_power <= 150:
+            excise_tax = 58 * engine_power
+        elif 150 < engine_power <= 200:
+            excise_tax = 557 * engine_power
+        elif 200 < engine_power <= 300:
+            excise_tax = 912 * engine_power
+        elif 300 < engine_power <= 400:
+            excise_tax = 1555 * engine_power
+        elif 400 < engine_power <= 500:
+            excise_tax = 1609 * engine_power
         else:
-            excise_tax = 1662 * engine_power_hp
+            excise_tax = 1662 * engine_power
     else:
         excise_tax = 0
+
     return excise_tax
 
 
@@ -185,12 +194,15 @@ def calculate_vat(price_won, customs_fees, excise_tax, fuel_type):
     types for non-electric vehicles.
     :return: The calculated VAT amount.
     """
+
     today = str(datetime.datetime.now())[:10]
     rates_today = ExchangeRates(today)
     price_rub = float(rates_today['KRW'].rate) * price_won
+
     if fuel_type == 'ELECTRO':
         total_amount = price_rub + customs_fees + excise_tax
         vat = 0.20 * total_amount
     else:
         vat = 0
+
     return vat

@@ -1,7 +1,7 @@
 # mileage_keyboard.py
 from aiogram import types
-from aiogram.filters.callback_data import CallbackData
 from aiogram.utils.keyboard import InlineKeyboardBuilder
+from aiogram.filters.callback_data import CallbackData
 
 
 class MileageChoose(CallbackData, prefix='m'):

@@ -1,8 +1,8 @@
 # year_bounds_keyboard.py
 from datetime import datetime
 from aiogram import types
-from aiogram.filters.callback_data import CallbackData
 from aiogram.utils.keyboard import InlineKeyboardBuilder
+from aiogram.filters.callback_data import CallbackData
 
 
 class YearChoose(CallbackData, prefix='y'):

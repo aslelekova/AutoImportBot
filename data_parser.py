@@ -24,8 +24,10 @@ def parse_auto_ru(brand_auto_ru, model_auto_ru, year_left_bound, year_right_boun
     :param mileage_right_bound: The right bound of the mileage range.
     :return: A list of car offers parsed from auto.ru.
     """
+
     offers = []
     page = 1
+
     # Loop until there are no more offers.
     while True:
         if year_left_bound == 0 and year_right_bound == 0: year_left_bound, year_right_bound = None, None
@@ -83,10 +85,13 @@ def parse_encar_com(brand_encar_com, model_encar_com, year_left_bound, year_righ
     :param mileage_right_bound: The right bound of the mileage range.
     :return: A list of car data parsed from encar.com.
     """
+
     if mileage_right_bound == 0:
         mileage_right_bound = ''
+
     if mileage_left_bound == 0:
         mileage_left_bound = ''
+
     if year_left_bound == 0 and year_right_bound == 0:
         year_left_bound, year_right_bound = '0000', '9999'
 
@@ -95,7 +100,8 @@ def parse_encar_com(brand_encar_com, model_encar_com, year_left_bound, year_righ
         if fuel_type_encar_com == "가솔린+전기 디젤+전기":
             params = {
                 "count": "true",
-                "q": f"(And.Year.range({str(year_left_bound)}00..{str(year_right_bound)}99)._.Mileage.range({str(mileage_left_bound)}..{str(mileage_right_bound)})._.Hidden.N._.SellType.일반._.("
+                "q": f"(And.Year.range({str(year_left_bound)}00..{str(year_right_bound)}99)._.Mileage.range("
+                     f"{str(mileage_left_bound)}..{str(mileage_right_bound)})._.Hidden.N._.SellType.일반._.("
                      f"Or.FuelType.가솔린+전기._.FuelType.디젤+전기.)_.(C.CarType.Y._.(C.Manufacturer.{brand_encar_com}._"
                      f".ModelGroup.{model_encar_com}.)))",
                 "sr": "|ModifiedDate|0|20"
@@ -103,31 +109,37 @@ def parse_encar_com(brand_encar_com, model_encar_com, year_left_bound, year_righ
         else:
             params = {
                 "count": "true",
-                "q": f"(And.Year.range({str(year_left_bound)}00..{str(year_right_bound)}99)._.Mileage.range({str(mileage_left_bound)}.."
-                     f"{str(mileage_right_bound)})._.Hidden.N._.(C.CarType.Y._.(C.Manufacturer.{brand_encar_com}._.ModelGroup."
-                     f"{model_encar_com}.))_.SellType.일반._.FuelType.{fuel_type_encar_com}.)",
+                "q": f"(And.Year.range({str(year_left_bound)}00..{str(year_right_bound)}99)._.Mileage.range("
+                     f"{str(mileage_left_bound)}..{str(mileage_right_bound)})._.Hidden.N._.(C.CarType.Y._."
+                     f"(C.Manufacturer.{brand_encar_com}._.ModelGroup.{model_encar_com}.))_.SellType.일반._.FuelType."
+                     f"{fuel_type_encar_com}.)",
                 "sr": "|ModifiedDate|0|20"
             }
     else:
         if fuel_type_encar_com == "가솔린+전기 디젤+전기":
             params = {
                 "count": "true",
-                "q": f"(And.Year.range({str(year_left_bound)}00..{str(year_right_bound)}99)._.Mileage.range({str(mileage_left_bound)}..{str(mileage_right_bound)})._.Hidden.N._.SellType.일반._.("
-                     f"Or.FuelType.가솔린+전기._.FuelType.디젤+전기.)_.(C.CarType.N._.(C.Manufacturer.{brand_encar_com}._.ModelGroup.{model_encar_com}.)))",
+                "q": f"(And.Year.range({str(year_left_bound)}00..{str(year_right_bound)}99)._.Mileage.range("
+                     f"{str(mileage_left_bound)}..{str(mileage_right_bound)})._.Hidden.N._.SellType.일반._.("
+                     f"Or.FuelType.가솔린+전기._.FuelType.디젤+전기.)_.(C.CarType.N._.(C.Manufacturer."
+                     f"{brand_encar_com}._.ModelGroup.{model_encar_com}.)))",
                 "sr": "|ModifiedDate|0|20"
             }
         else:
             params = {
                 "count": "true",
-                "q": f"(And.Year.range({str(year_left_bound)}00..{str(year_right_bound)}99)._.Mileage.range({str(mileage_left_bound)}.."
-                     f"{str(mileage_right_bound)})._.Hidden.N._.(C.CarType.N._.(C.Manufacturer.{brand_encar_com}._.ModelGroup."
-                     f"{model_encar_com}.))_.SellType.일반._.FuelType.{fuel_type_encar_com}.)",
+                "q": f"(And.Year.range({str(year_left_bound)}00..{str(year_right_bound)}99)._.Mileage.range("
+                     f"{str(mileage_left_bound)}..{str(mileage_right_bound)})._.Hidden.N._.(C.CarType.N._."
+                     f"(C.Manufacturer.{brand_encar_com}._.ModelGroup.{model_encar_com}.))_.SellType.일반._.FuelType."
+                     f"{fuel_type_encar_com}.)",
                 "sr": "|ModifiedDate|0|20"
             }
 
     all_data = []
 
-    response = requests.get(url_encar_com, params=params, headers=headers_encar_com, auth=HTTPBasicAuth(username, password))
+    response = requests.get(url_encar_com, params=params, headers=headers_encar_com, auth=HTTPBasicAuth(username,
+                                                                                                        password))
+
     if response.status_code == 200:
         try:
             json_data = response.json()
@@ -137,7 +149,9 @@ def parse_encar_com(brand_encar_com, model_encar_com, year_left_bound, year_righ
             # Iterating over all pages of the API response.
             for page in range(total_pages):
                 params["sr"] = f"|ModifiedDate|{page * 20}|20"
-                response = requests.get(url_encar_com, params=params, headers=headers_encar_com, auth=HTTPBasicAuth(username, password))
+                response = requests.get(url_encar_com, params=params, headers=headers_encar_com,
+                                        auth=HTTPBasicAuth(username, password))
+
                 # Parsing JSON data from each page.
                 if response.status_code == 200:
                     try:
@@ -154,4 +168,5 @@ def parse_encar_com(brand_encar_com, model_encar_com, year_left_bound, year_righ
             logger.error("Error: Unable to parse response to JSON")
     else:
         logger.error(f"Error: Failed to make request. Response code: {response.status_code}")
+
     return all_data

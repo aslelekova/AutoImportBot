@@ -1,6 +1,6 @@
-# EncarBot
+# AutoImportBot
 
-This Telegram bot helps users evaluate the cost-effectiveness of importing cars from Korea to Russia. Choose the perfect car and compare costs effortlessly with EncarBot. It streamlines the process by parsing listings from Encar.com (Korea) and Auto.ru (Russia), allowing you to easily find the most suitable vehicle and compare costs with a user-friendly interface.
+This Telegram bot helps users evaluate the cost-effectiveness of importing cars from Korea to Russia. Choose the perfect car and compare costs effortlessly with AutoImportBot. It streamlines the process by parsing listings from Encar.com (Korea) and Auto.ru (Russia), allowing you to easily find the most suitable vehicle and compare costs with a user-friendly interface.
 
 ## Features
 
@@ -28,16 +28,16 @@ git clone https://github.com/aslelekova/telegram-car-import-cost-bot.git
 Build the Docker image using the provided Dockerfile:
 
 ```bash
-docker build -t encarbot:latest .
+docker build -t autoimportbot:latest .
 ```
 
 ### Run Docker Container
 Run a Docker container from the built image:
 
 ```bash
-docker run -d encarbot:latest
+docker run -d autoimportbot:latest
 ```
-This command starts the EncarBot container in detached mode (-d), executing the bot inside the Docker container.
+This command starts the AutoImportBot container in detached mode (-d), executing the bot inside the Docker container.
 
 ### Install Dependencies
 

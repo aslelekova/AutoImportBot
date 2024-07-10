@@ -21,7 +21,7 @@ This Telegram bot helps users evaluate the cost-effectiveness of importing cars 
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/aslelekova/telegram-car-import-cost-bot.git
+git clone https://github.com/aslelekova/AutoImportBot
 ```
 
 ### Build Docker Image
